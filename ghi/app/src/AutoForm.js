@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const AutomobileForm = () => {
+const AutoForm = () => {
 
     const [color, setColor] = useState('');
     const [year, setYear] = useState('');
@@ -24,7 +24,7 @@ const AutomobileForm = () => {
             'vin': vin,
             'model_id': model_id,
         }
-        console.log(newAuto);
+        // console.log(newAuto);
         const carUrl = 'http://localhost:8100/api/automobiles/';
         const fetchConfig = {
             method: "post",
@@ -70,7 +70,7 @@ const AutomobileForm = () => {
         <div className="my-5 container">
           <div className="offset-3 col-6">
             <div className="shadow p-4 mt-4">
-              <h1>Add an automobile to inventory</h1>
+              <h1>Add an Automobile to Inventory</h1>
               <form onSubmit={handleSubmit} id="create-automobile-form">
                 <div className="form-floating mb-3">
                   <input onChange={handleChangeColor} value={color}  placeholder="Color" required type="text" name="color" id="color" className="form-control" />
@@ -102,4 +102,4 @@ const AutomobileForm = () => {
     );
 }
 
-export default AutomobileForm;
+export default AutoForm;

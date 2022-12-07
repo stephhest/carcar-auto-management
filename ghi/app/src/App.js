@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AutomobileForm from './AutomobileForm';
-import MainPage from './MainPage';
+import AutosList from './AutosList';
+import AutoForm from './AutoForm';
 import ManufacturerForm from './ManufacturerForm';
 import ModelForm from './ModelForm';
+import MainPage from './MainPage';
 import Nav from './Nav';
 
 function App() {
@@ -21,8 +22,8 @@ function App() {
             <Route path="new" element={<ModelForm />} />
           </Route>
           <Route path="automobiles">
-            <Route index element={<MainPage />} />
-            <Route path="new" element={<AutomobileForm />} />
+            <Route index element={<AutosList />} />
+            <Route path="new" element={<AutoForm />} />
           </Route>
         </Routes>
       </div>

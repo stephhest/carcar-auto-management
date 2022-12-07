@@ -1,3 +1,6 @@
+// DO NOT USE //
+// FOR REFERENCE ONLY - Class Component Example //
+
 import React from 'react';
 
 class ModelFormClass extends React.Component {
@@ -106,4 +109,4 @@ class ModelFormClass extends React.Component {
   }
 }
 
-export default ModelFormClass;
+// export default ModelFormClass;
