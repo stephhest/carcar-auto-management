@@ -19,6 +19,7 @@ class TechnicianEncoder(ModelEncoder):
     model = Technician
     properties = [
         "name",
+        "employee_number",
         "id",
     ]
 
@@ -139,7 +140,7 @@ def api_list_technicians(request):
             )
         except:
             response = JsonResponse(
-                {"message": "Could not create the tech"}
+                {"message": "Could not create the technician"}
             )
             response.status_code = 400
             return response
@@ -175,7 +176,7 @@ def api_show_technician(request, pk):
             content = json.loads(request.body)
             tech = Technician.objects.get(id=pk)
 
-            props = ["name", "id"]
+            props = ["name", "employee_id"]
             for prop in props:
                 if prop in content:
                     setattr(tech, prop, content[prop])

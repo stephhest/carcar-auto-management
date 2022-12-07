@@ -1,105 +1,62 @@
-// import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-// const AutoForm = () => {
+const TechnicianForm = () => {
+  // Use the useState hook to create local state variables
+  // for the technician name, employee number, and any errors that occur
+  const [name, setName] = useState('');
+  const [employeeNumber, setEmployeeNumber] = useState('');
+  const [errors, setErrors] = useState({});
 
-//     const [color, setColor] = useState('');
-//     const [year, setYear] = useState('');
-//     const [vin, setVin] = useState('');
-//     const [model_id, setModel] = useState('');
-//     const [models, setModels] = useState([]);
+  // Define a function to handle the form submission
+  const handleSubmit = async event => {
+    // Prevent the default form submission behavior
+    event.preventDefault();
 
-//     useEffect(() => {
-//         const modelUrl = 'http://localhost:8100/api/models/';
-//         fetch(modelUrl)
-//             .then(response => response.json())
-//             .then(data => setModels(data.models))
-//             .catch(e => console.error("Fetch models error: ", e))
-//     }, [])
+    // Create the data object that will be sent to the API
+    const newTechnician = { name, employeeNumber };
 
-//     const handleSubmit = (event) => {
-//         event.preventDefault();
-//         const newAuto = {
-//             'color': color,
-//             'year': year,
-//             'vin': vin,
-//             'model_id': model_id,
-//         }
-//         // console.log(newAuto);
-//         const carUrl = 'http://localhost:8100/api/automobiles/';
-//         const fetchConfig = {
-//             method: "post",
-//             body: JSON.stringify(newAuto),
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         }
-//         fetch(carUrl, fetchConfig)
-//             .then(response => response.json())
-//             .then(() => {
-//                 setColor('');
-//                 setYear('');
-//                 setVin('');
-//                 setModel('');
-//             })
-//             .catch(e => console.log('Auto fetch error: ', e))
-//         // add some success alert here
-//     }
+    try {
+      // Send a POST request to the API to create the technician
+      const response = await fetch('http://localhost:8080/api/technicians/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newTechnician)
+      });
 
+      // If the response is not successful, throw an error
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+    } catch (error) {
+      // Update the errors object with the error message
+      setErrors({ ...errors, api: error.message });
+    }
+  };
 
-//     const handleChangeColor = (event) => {
-//         const value = event.target.value;
-//         setColor(value);
-//     }
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* If there are any errors, display them */}
+      {errors.api && <p>{errors.api}</p>}
 
-//     const handleChangeYear = (event) => {
-//         const value = event.target.value;
-//         setYear(value);
-//     }
+      <label htmlFor="name">Technician Name:</label>
+      <input
+        type="text"
+        id="name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+      />
 
-//     const handleChangeVin = (event) => {
-//         const value = event.target.value;
-//         setVin(value);
-//     }
+      <label htmlFor="employeeNumber">Employee Number:</label>
+      <input
+        type="text"
+        id="employeeNumber"
+        value={employeeNumber}
+        onChange={e => setEmployeeNumber(e.target.value)}
+      />
 
-//     const handleChangeModel = (event) => {
-//         const value = event.target.value;
-//         setModel(value);
-//     }
-
-//     return (
-//         <div className="my-5 container">
-//           <div className="offset-3 col-6">
-//             <div className="shadow p-4 mt-4">
-//               <h1>Add an Automobile to Inventory</h1>
-//               <form onSubmit={handleSubmit} id="create-automobile-form">
-//                 <div className="form-floating mb-3">
-//                   <input onChange={handleChangeColor} value={color}  placeholder="Color" required type="text" name="color" id="color" className="form-control" />
-//                   <label htmlFor="color">Color</label>
-//                 </div>
-//                 <div className="form-floating mb-3">
-//                   <input onChange={handleChangeYear} value={year}  placeholder="Year" required type="number" name="year" id="year" className="form-control" />
-//                   <label htmlFor="year">Year</label>
-//                 </div>
-//                 <div className="form-floating mb-3">
-//                   <input onChange={handleChangeVin} value={vin}  placeholder="VIN" required type="text" name="vin" id="vin" className="form-control" />
-//                   <label htmlFor="vin">VIN</label>
-//                 </div>
-//                 <div className="mb-3">
-//                   <select onChange={handleChangeModel} value={model_id} required name="model" id="model" className="form-select">
-//                     <option value="">Choose a model</option>
-//                     {models.map(model => {
-//                       return (
-//                         <option key={model.id} value={model.id}>{model.manufacturer.name} {model.name}</option>
-//                       )
-//                     })}
-//                   </select>
-//                 </div>
-//                 <button className="btn btn-primary">Create</button>
-//               </form>
-//             </div>
-//           </div>
-//         </div>
-//     );
-// }
-
-// export default AutoForm;
+      <button type="submit">Create Technician</button>
+    </form>
+  );
+};
