@@ -44,7 +44,7 @@ class AppointmentEncoder(ModelEncoder):
 
 
 @require_http_methods(["GET", "POST"])
-def list_appointments(request):
+def api_list_appointments(request):
     if request.method == "GET":
         appointments = Appointment.objects.all()
         return JsonResponse(
@@ -74,7 +74,7 @@ def list_appointments(request):
 
 
 @require_http_methods(["DELETE", "GET", "PUT"])
-def show_appointments(request, pk):
+def api_show_appointments(request, pk):
     if request.method == "GET":
         try:
             appointment = Appointment.objects.get(id=pk)
@@ -121,7 +121,7 @@ def show_appointments(request, pk):
 
 
 @require_http_methods(["GET", "POST"])
-def list_technicians(request):
+def api_list_technicians(request):
     if request.method == "GET":
         technician = Technician.objects.all()
         return JsonResponse(
@@ -146,7 +146,7 @@ def list_technicians(request):
 
 
 @require_http_methods(["DELETE", "GET", "PUT"])
-def show_technician(request, pk):
+def api_show_technician(request, pk):
     if request.method == "GET":
         try:
             technician = Technician.objects.get(id=pk)
@@ -193,7 +193,7 @@ def show_technician(request, pk):
 
 
 @require_http_methods(["GET"])
-def service_history(request, vin):
+def api_service_history(request, vin):
     if request.method == "GET":
 
         try:
