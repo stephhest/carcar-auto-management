@@ -5,58 +5,68 @@ const TechnicianForm = () => {
   // for the technician name, employee number, and any errors that occur
   const [name, setName] = useState('');
   const [employeeNumber, setEmployeeNumber] = useState('');
-  const [errors, setErrors] = useState({});
+
 
   // Define a function to handle the form submission
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     // Prevent the default form submission behavior
     event.preventDefault();
 
     // Create the data object that will be sent to the API
-    const newTechnician = { name, employeeNumber };
-
-    try {
-      // Send a POST request to the API to create the technician
-      const response = await fetch('http://localhost:8080/api/technicians/', {
-        method: 'POST',
+    const newTechnician = {
+        "name": name,
+        "employee_number": employeeNumber,
+    };
+    console.log(newTechnician)
+    const technicianUrl = 'http://localhost:8080/api/technicians/';
+    const fetchConfig = {
+        method: "post",
+        body: JSON.stringify(newTechnician),
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newTechnician)
-      });
-
-      // If the response is not successful, throw an error
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-    } catch (error) {
-      // Update the errors object with the error message
-      setErrors({ ...errors, api: error.message });
     }
-  };
+    fetch(technicianUrl, fetchConfig)
+        .then(response => response.json)
+        .then(() => {
+            setName('');
+            setEmployeeNumber('');
+        })
+        .catch(e => console.log('Technician fetch error: ', e))
+        console.log(technicianUrl)
+        console.log(fetchConfig)
+    }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* If there are any errors, display them */}
-      {errors.api && <p>{errors.api}</p>}
+    const handleChangeName = (event) => {
+        const value = event.target.value;
+        setName(value);
+    }
 
-      <label htmlFor="name">Technician Name:</label>
-      <input
-        type="text"
-        id="name"
-        value={name}
-        onChange={e => setName(e.target.value)}
-      />
+    const handleChangeEmployeeNumber = (event) => {
+        const value = event.target.value;
+        setEmployeeNumber(value);
+    }
 
-      <label htmlFor="employeeNumber">Employee Number:</label>
-      <input
-        type="text"
-        id="employeeNumber"
-        value={employeeNumber}
-        onChange={e => setEmployeeNumber(e.target.value)}
-      />
+    return (
+        <div className="my-5 container">
+            <div className="offset-3 col-6">
+                <div className="shadow p-4 mt-4">
+                    <h1>Create a Technician</h1>
+                    <form onSubmit={handleSubmit} id="create-technician-form">
+                        <div className="form-floating mb-3">
+                            <input onChange={handleChangeName} value={name} placeholder="name" required type="text" name="name" id="name" className="form-control" />
+                            <label htmlFor="name">Name</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input onChange={handleChangeEmployeeNumber} value={employeeNumber} placeholder="employee_number" required type="text" name="employee_number" id="employee_number" className="form-control" />
+                            <label htmlFor="employeeNumber">Employee Number</label>
+                        </div>
+                        <button className="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+}
 
-      <button type="submit">Create Technician</button>
-    </form>
-  );
-};
+export default TechnicianForm;
