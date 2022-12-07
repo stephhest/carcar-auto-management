@@ -195,15 +195,18 @@ def show_technician(request, pk):
 @require_http_methods(["GET"])
 def service_history(request, vin):
     if request.method == "GET":
+
         try:
-            service = Appointment.objects.filter(banana__vin=vin)
-            #service = Appointment.objects.all()
+            service = Appointment.objects.filter(automobile__vin=vin)
+            if len(service) == 0:
+                raise ValueError('There are no past services associated with this VIN number')
             return JsonResponse(
                 service,
                 encoder=AppointmentEncoder,
                 safe=False
             )
         except Appointment.DoesNotExist:
+            print("Hello Vin")
             return JsonResponse(
                 {"message": "Invalid Appointment"},
                 status=400,
