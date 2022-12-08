@@ -19,8 +19,8 @@ function Nav() {
               <NavLink className="nav-link" to="/models">Vehicle Models</NavLink>
             <li className="nav-item"></li>
               <NavLink className="nav-link" to="/technicians/new">Create Technician</NavLink>
-            {/* <li className="nav-item"></li>
-              <NavLink className="nav-link" to="/service/appointment/new">New Service Appointment</NavLink> */}
+            <li className="nav-item"></li>
+              <NavLink className="nav-link" to="appointments/new">New Service Appointment</NavLink>
             <li className="nav-item"></li>
               <NavLink className="nav-link" to="/appointments">All Appointments</NavLink>
             <li className="nav-item"></li>
