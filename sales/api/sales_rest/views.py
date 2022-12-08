@@ -136,7 +136,7 @@ def api_list_sales(request, employee_number=None):
             sales = Sale.objects.filter(sales_person_id=sales_person_id)
         else:
             sales = Sale.objects.all()
-            print(sales)
+            # print(sales)
         return JsonResponse(
             {"sales": sales},
             encoder=SaleEncoder,
@@ -155,7 +155,6 @@ def api_list_sales(request, employee_number=None):
                     status=400
                 )
             else:
-                AutomobileVO.objects.filter(vin=automobile_vin).update(sold=True)
                 content["automobile"] = automobile
         except AutomobileVO.DoesNotExist:
             return JsonResponse(
@@ -179,6 +178,7 @@ def api_list_sales(request, employee_number=None):
                 status=400
             )
         sale = Sale.objects.create(**content)
+        AutomobileVO.objects.filter(vin=automobile_vin).update(sold=True)
         return JsonResponse(
             sale,
             encoder=SaleEncoder,
