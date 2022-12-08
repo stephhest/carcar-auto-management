@@ -45,12 +45,12 @@ class SaleEncoder(ModelEncoder):
     properties = [
         "id",
         "sale_price",
-        "sales_person",
+        # "sales_person",
         # "automobile",
         # "customer"
     ]
     encoders = {
-        "sales_person": SalesPersonEncoder(),
+        # "sales_person": SalesPersonEncoder(),
         # "automobile": AutomobileVOEncoder(),
         # "customer": CustomerEncoder(),
     }
@@ -59,6 +59,8 @@ class SaleEncoder(ModelEncoder):
         return {
             "automobile": o.automobile.vin,
             "customer": o.customer.name,
+            "sales_person": o.sales_person.name,
+            "employee_number": o.sales_person.employee_number
         }
 
 
@@ -128,7 +130,10 @@ def api_list_customers(request):
 def api_list_sales(request, employee_number=None):
     if request.method == "GET":
         if employee_number is not None:
-            sales = Sale.objects.filter(employee_number=employee_number)
+            sales_person_id = SalesPerson.objects.values_list('id', flat=True).get(employee_number=employee_number)
+            # print("Employee Number: ", employee_number)
+            # print("Sales Person ID: ", sales_person_id)
+            sales = Sale.objects.filter(sales_person_id=sales_person_id)
         else:
             sales = Sale.objects.all()
             print(sales)
