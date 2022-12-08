@@ -68,7 +68,7 @@ class ServiceAppointmentList extends React.Component {
                         }
                         return (
                             <tr key={appointment.id}>
-                                <td>{appointment.automobile.vin}</td>
+                                <td>{appointment.vin}</td>
                                 <td>{appointment.owner_name}</td>
                                 <td>{appointment.date}</td>
                                 <td>{appointment.time}</td>
