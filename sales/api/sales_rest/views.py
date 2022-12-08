@@ -15,8 +15,10 @@ class AutomobileVOEncoder(ModelEncoder):
         "import_href",
         "vin",
         "color",
-        "year"
+        "year",
+        "sold"
     ]
+
 
 class SalesPersonEncoder(ModelEncoder):
     model = SalesPerson
@@ -25,6 +27,7 @@ class SalesPersonEncoder(ModelEncoder):
         "name",
         "employee_number"
     ]
+
 
 class CustomerEncoder(ModelEncoder):
     model = Customer
@@ -35,26 +38,28 @@ class CustomerEncoder(ModelEncoder):
         "phone"
     ]
 
+
 class SaleEncoder(ModelEncoder):
     model = Sale
     properties = [
         "id",
         "sale_price",
-        "sales_person"
+        "sales_person",
         # "automobile",
         # "customer"
     ]
     encoders = {
-        "sales_person": SalesPersonEncoder,
+        "sales_person": SalesPersonEncoder(),
         # "automobile": AutomobileVOEncoder,
         # "customer": CustomerEncoder,
     }
 
-    def get_extra_data(self, o):
-        return {
-            "automobile": o.automobile.vin,
-            "customer": o.customer.name,
-        }
+    # def get_extra_data(self, o):
+    #     return {
+    #         "automobile": o.automobile.vin,
+    #         "customer": o.customer.name,
+    #     }
+
 
 
 ### VIEWS ###
@@ -77,15 +82,16 @@ def api_list_salespeople(request):
         salespeople = SalesPerson.objects.all()
         return JsonResponse(
             {"salespeople": salespeople},
-            encoder=SalesPersonEncoder
+            encoder=SalesPersonEncoder,
         )
     else: #POST
         content = json.loads(request.body)
-        sales_person = Sale.objects.create(**content)
+        sales_person = SalesPerson.objects.create(**content)
         return JsonResponse(
-            sales_person,
+            {"sales_person": sales_person},
             encoder=SalesPersonEncoder,
         )
+        # Handle integrity error / exception handling for when an employee id already exists
 
 
 # LIST AND CREATE CUSTOMERS
@@ -100,10 +106,11 @@ def api_list_customers(request):
         )
     else: #POST
         content = json.loads(request.body)
-        customer = Sale.objects.create(**content)
+        customer = Customer.objects.create(**content)
+        print("customer", customer)
         return JsonResponse(
-            customer,
-            encoder=CustomerEncoder,
+            {"customer": customer},
+            encoder=CustomerEncoder
         )
 
 
@@ -117,22 +124,29 @@ def api_list_sales(request, employee_number=None):
             sales = Sale.objects.filter(employee_number=employee_number)
         else:
             sales = Sale.objects.all()
+            print(sales)
         return JsonResponse(
             {"sales": sales},
-            encoder=SaleEncoder
+            encoder=SaleEncoder,
+            safe=False
         )
     else: #POST
         content = json.loads(request.body)
         try:
             automobile_vin = content["automobile"]
             automobile = AutomobileVO.objects.get(vin=automobile_vin)
-            content["automobile"] = automobile
+            if automobile.sold:
+                return JsonResponse(
+                    {"message": "This automobile has already been sold"},
+                    status=400
+                )
+            else:
+                content["automobile"] = automobile
         except AutomobileVO.DoesNotExist:
             return JsonResponse(
                 {"message": "Invalid or missing auto vin"},
                 status=400
             )
-
         sale = Sale.objects.create(**content)
         return JsonResponse(
             sale,

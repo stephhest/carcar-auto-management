@@ -9,11 +9,13 @@ class AutomobileVO(models.Model):
     year = models.PositiveSmallIntegerField()
     vin = models.CharField(max_length=17, unique=True)
 
-    # def get_api_url(self):
-    #     return reverse("api_show_auto_vo", kwargs={"vin": self.vin})
+    sold = models.BooleanField(default=False)
 
-    # def __str__(self):
-    #     return self.vin
+    def get_api_url(self):
+        return reverse("api_show_auto_vo", kwargs={"vin": self.vin})
+
+    def __str__(self):
+        return self.vin
 
 
 # SalesPerson
@@ -43,9 +45,9 @@ class Customer(models.Model):
 
 # Sale
 class Sale(models.Model):
-    sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.PositiveIntegerField()
 
-    automobile = models.OneToOneField(
+    automobile = models.ForeignKey(
         AutomobileVO,
         related_name="sale",
         on_delete=models.CASCADE,
@@ -67,4 +69,4 @@ class Sale(models.Model):
         return reverse("api_show_sale", kwargs={"pk": self.id})
 
     def __str__(self):
-        return f"${self.sale_price}"
+        return f"{self.sales_person} - ${self.sale_price}"
