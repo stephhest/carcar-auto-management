@@ -127,7 +127,7 @@ class ServiceAppointmentForm extends React.Component {
 					</div>
 					<div className="mb-3">
 					  <select value={this.state.technician} onChange={this.handleTechnicianChange} required name="technician" id="technician" className="form-select">
-						{/* <option value="">Choose a technician</option> */}
+						<option value="">Choose a technician</option>
 						{this.state.technicians.map(technician => {
 						  return (
 							<option key={technician.id} value={technician.id}>
