@@ -86,6 +86,7 @@ def api_list_salespeople(request):
         )
     else: #POST
         content = json.loads(request.body)
+        # employee_number = content["sales_person"]
         sales_person = SalesPerson.objects.create(**content)
         return JsonResponse(
             {"sales_person": sales_person},
