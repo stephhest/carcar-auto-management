@@ -2,6 +2,7 @@ from django.shortcuts import render
 from common.json import ModelEncoder
 from django.http import JsonResponse
 import json
+from django.db import IntegrityError
 from django.views.decorators.http import require_http_methods
 
 from .models import AutomobileVO, SalesPerson, Customer, Sale
@@ -86,13 +87,18 @@ def api_list_salespeople(request):
         )
     else: #POST
         content = json.loads(request.body)
-        # employee_number = content["sales_person"]
-        sales_person = SalesPerson.objects.create(**content)
-        return JsonResponse(
-            {"sales_person": sales_person},
-            encoder=SalesPersonEncoder,
-        )
         # Handle integrity error / exception handling for when an employee id already exists
+        try:
+            sales_person = SalesPerson.objects.create(**content)
+            return JsonResponse(
+                {"sales_person": sales_person},
+                encoder=SalesPersonEncoder,
+            )
+        except IntegrityError:
+            return JsonResponse(
+                {"message": "Employee number already used.  Please try again."},
+                status=400
+            )
 
 
 # LIST AND CREATE CUSTOMERS
