@@ -107,11 +107,11 @@ class ServiceAppointmentForm extends React.Component {
 				  <form onSubmit={this.handleSubmit} id="create-service-appointment-form" >
 					<div className="form-floating mb-3">
 					  <input value={this.state.vin} onChange={this.handleVinChange} placeholder="vin" required type="text" name="vin" id="vin" className="form-control" />
-					  <label htmlFor="vin">Vin</label>
+					  <label htmlFor="vin">VIN #</label>
 					</div>
 					<div className="form-floating mb-3">
 					  <input value={this.state.ownerName} onChange={this.handleOwnerNameChange} placeholder="ownerName" required type="text" name="ownerName" id="ownerName" className="form-control" />
-					  <label htmlFor="ownerName">OwnerName</label>
+					  <label htmlFor="ownerName">Customer Name</label>
 					</div>
 					<div className="form-floating mb-3">
 					  <input value={this.state.date} onChange={this.handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
@@ -123,7 +123,7 @@ class ServiceAppointmentForm extends React.Component {
 					</div>
 					<div className="form-floating mb-3">
 					  <textarea value={this.state.reason} onChange={this.handleReasonChange} placeholder="reason" name="reason" id="reason" className="form-control" rows="3"/>
-					  <label htmlFor="reason" className="form-label">reason</label>
+					  <label htmlFor="reason" className="form-label">Reason</label>
 					</div>
 					<div className="mb-3">
 					  <select value={this.state.technician} onChange={this.handleTechnicianChange} required name="technician" id="technician" className="form-select">

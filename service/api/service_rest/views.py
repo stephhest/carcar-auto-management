@@ -35,11 +35,10 @@ class AppointmentListEncoder(ModelEncoder):
         "purchased",
         "complete",
         "id",
-        "vin", #-------just added may break code
+        "vin",
         "technician",
     ]
     encoders = {
-        # "automobile": AutomobileVOEncoder(),
         "technician": TechnicianEncoder(),
     }
 
@@ -57,29 +56,21 @@ def api_list_appointments(request, input_vin=None):
     else:
         content = json.loads(request.body)
         content["complete"] = False
-        print("content", content)
         try:
             try:
                 purchase = AutomobileVO.objects.get(vin=content["vin"])
                 content["purchased"] = True
-                print("content", content)
             except AutomobileVO.DoesNotExist:
                 content["purchased"] = False
-                print("content", content)
-                print("hello")
             technician = Technician.objects.get(id=content["technician"])
             content["technician"] = technician
-            print("hheeelllo")
             appointment = Appointment.objects.create(**content)
-            print("hi")
-            print("appointment", appointment)
             return JsonResponse(
                 appointment,
                 encoder=AppointmentListEncoder,
                 safe=False,
             )
         except Exception as e:
-            print(e)
             response = JsonResponse(
                 {"message": "Could not create an Appointment"}
             )

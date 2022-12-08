@@ -56,7 +56,6 @@ class ServiceHistoryList extends React.Component {
               <th>Appointment Time</th>
               <th>Technician</th>
               <th>Reason</th>
-              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -69,7 +68,6 @@ class ServiceHistoryList extends React.Component {
                   <td>{appointment.time}</td>
                   <td>{appointment.technician.name}</td>
                   <td>{appointment.reason}</td>
-                  <td>{appointment.finished ? "finished" : "not yet"}</td>
                 </tr>
               )
             })}

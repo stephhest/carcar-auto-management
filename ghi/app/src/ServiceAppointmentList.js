@@ -27,7 +27,6 @@ class ServiceAppointmentList extends React.Component {
         const response = await fetch(serviceUrl, fetchConfig);
         if (response.ok) {
           const deleteService = await response.json();
-          console.log(deleteService);
           this.fetchAppointments();
         }
     }
@@ -59,7 +58,6 @@ class ServiceAppointmentList extends React.Component {
                 </thead>
                 <tbody>
                     {this.state.appointments.map(appointment => {
-                        console.log(appointment)
                         let vip = ""
                         if(appointment.vip === true){
                             vip = "Yes"
@@ -82,9 +80,6 @@ class ServiceAppointmentList extends React.Component {
                     })}
                 </tbody>
             </table>
-            <Link to="/service/new">
-            <button className="btn btn-success">Create Appointment</button>
-            </Link>
         </>
     );
     }
