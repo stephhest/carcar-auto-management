@@ -3,14 +3,14 @@
 Team:
 
 * Person 1 - Which microservice?
-* Person 2 - Which microservice?
+* Kayre - Service microservice?
 
 ## Design
 
 ## Service microservice
 
-Explain your models and integration with the inventory
-microservice, here.
+- The Services microservice includes:
+    
 
 ## Sales microservice
 
