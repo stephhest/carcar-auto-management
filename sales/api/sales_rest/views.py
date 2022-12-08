@@ -50,15 +50,15 @@ class SaleEncoder(ModelEncoder):
     ]
     encoders = {
         "sales_person": SalesPersonEncoder(),
-        # "automobile": AutomobileVOEncoder,
-        # "customer": CustomerEncoder,
+        # "automobile": AutomobileVOEncoder(),
+        # "customer": CustomerEncoder(),
     }
 
-    # def get_extra_data(self, o):
-    #     return {
-    #         "automobile": o.automobile.vin,
-    #         "customer": o.customer.name,
-    #     }
+    def get_extra_data(self, o):
+        return {
+            "automobile": o.automobile.vin,
+            "customer": o.customer.name,
+        }
 
 
 
@@ -132,8 +132,10 @@ def api_list_sales(request, employee_number=None):
         )
     else: #POST
         content = json.loads(request.body)
-        try:
-            automobile_vin = content["automobile"]
+        automobile_vin = content["automobile"]
+        customer_id = content["customer"]
+        employee_number = content["sales_person"]
+        try: #handle auto vin
             automobile = AutomobileVO.objects.get(vin=automobile_vin)
             if automobile.sold:
                 return JsonResponse(
@@ -141,10 +143,27 @@ def api_list_sales(request, employee_number=None):
                     status=400
                 )
             else:
+                AutomobileVO.objects.filter(vin=automobile_vin).update(sold=True)
                 content["automobile"] = automobile
         except AutomobileVO.DoesNotExist:
             return JsonResponse(
                 {"message": "Invalid or missing auto vin"},
+                status=400
+            )
+        try: #handle customer
+            customer = Customer.objects.get(id=customer_id)
+            content["customer"] = customer
+        except Customer.DoesNotExist:
+            return JsonResponse(
+                {"message": "Invalid or missing customer id"},
+                status=400
+            )
+        try: #handle sales person
+            sales_person = SalesPerson.objects.get(employee_number= employee_number)
+            content["sales_person"] = sales_person
+        except SalesPerson.DoesNotExist:
+            return JsonResponse(
+                {"message": "Invalid or missing sales person employee number"},
                 status=400
             )
         sale = Sale.objects.create(**content)
@@ -153,6 +172,7 @@ def api_list_sales(request, employee_number=None):
             encoder=SaleEncoder,
             safe=False,
         )
+
 
 # SHOW SALE
 # /api/sales/<int:pk>/
