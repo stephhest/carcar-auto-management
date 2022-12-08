@@ -16,7 +16,7 @@ Team:
     - docker-compose build (this command builds the containers for docker)
     - docker-compose up (this command runds the docker containers)
 4. Open up Docker Desktop and ensure all containers are running without errors
-5.Create data Insomnia using the routes and test data below (see CRUD ROUTE DOCUMENTATION and TEST DATA)
+5. Create data Insomnia using the routes and test data below (see CRUD ROUTE DOCUMENTATION and TEST DATA)
 6. To see and engage with the app, open up google chrome and type http://localhost:3000
 
 ## Design
