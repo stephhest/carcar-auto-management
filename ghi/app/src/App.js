@@ -18,33 +18,23 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
-<<<<<<< ghi/app/src/App.js
-          <Route path="/manufacturers" element={<ManufacturerList />} />
-          <Route path="/models" element={<ModelList />} />
-          <Route path="/technicians/new" element={<TechnicianForm />} />
-          <Route path="/service/appointment/new" element={<ServiceAppointmentForm />} />
-          <Route path="/service/all_appointments" element={<ServiceAppointmentList />} />
-=======
           <Route path="manufacturers">
-            <Route index element={<MainPage />} />
+            <Route index element={<ManufacturerList />} />
             <Route path="new" element={<ManufacturerForm />} />
           </Route>
-          // Added Kayre ROutes -----------------------------------------
-          <Route path="/manufacturers" element={<ManufacturerList />} />
-          <Route path="/models" element={<ModelList />} />
-          <Route path="/technicians/new" element={<TechnicianForm />} />
-          <Route path="/service/appointment/new" element={<ServiceAppointmentForm />} />
-          <Route path="/service/all_appointments" element={<ServiceAppointmentList />} />
-          // -----------------------------------------------------------------------------
+          <Route path="service">
+            <Route index element={<ServiceAppointmentList />} />
+            <Route path="new" element={<ServiceAppointmentForm />} />
+          </Route>
           <Route path="models">
-            <Route index element={<MainPage />} />
+            <Route index element={<ModelList />} />
             <Route path="new" element={<ModelForm />} />
           </Route>
           <Route path="automobiles">
             <Route index element={<AutosList />} />
             <Route path="new" element={<AutoForm />} />
           </Route>
->>>>>>> ghi/app/src/App.js
+          <Route path="/technicians/new" element={<TechnicianForm />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -39,7 +39,7 @@ const ManufacturerList = () => {
                     })}
                 </tbody>
             </table>
-            <Link to="/manufactures/new">
+            <Link to="/manufacturers/new">
                 <button className="btn btn-success">Add Manufacturer</button>
             </Link>
         </>

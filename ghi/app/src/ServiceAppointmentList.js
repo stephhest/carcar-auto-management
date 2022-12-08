@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from "react-router-dom";
 
 class ServiceAppointmentList extends React.Component {
     constructor(props) {
@@ -42,6 +42,7 @@ class ServiceAppointmentList extends React.Component {
 
     render() {
         return (
+            <>
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -81,7 +82,10 @@ class ServiceAppointmentList extends React.Component {
                     })}
                 </tbody>
             </table>
-
+            <Link to="/service/new">
+            <button className="btn btn-success">Create Appointment</button>
+            </Link>
+        </>
     );
     }
 }
