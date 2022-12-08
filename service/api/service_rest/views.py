@@ -4,13 +4,15 @@ from django.http import JsonResponse
 from common.json import ModelEncoder
 from .models import AutomobileVO, Appointment, Technician
 import json
-import random
+
 
 
 class AutomobileVOEncoder(ModelEncoder):
     model = AutomobileVO
     properties = [
         "vin",
+        "id",
+        "import_href",
     ]
 
 
@@ -29,107 +31,53 @@ class AppointmentListEncoder(ModelEncoder):
         "owner_name",
         "date",
         "time",
-        "automobile",
         "reason",
-        "vip",
+        "purchased",
+        "complete",
         "id",
+        "vin",
         "technician",
     ]
     encoders = {
-        "automobile": AutomobileVOEncoder(),
         "technician": TechnicianEncoder(),
     }
 
-
 @require_http_methods(["GET", "POST"])
-def api_list_appointments(request):
+def api_list_appointments(request, input_vin=None):
     if request.method == "GET":
-        appointments = Appointment.objects.all()
+        if input_vin is not None:
+            appointments = Appointment.objects.filter(vin=input_vin)
+        else:
+            appointments = Appointment.objects.all()
         return JsonResponse(
             {"appointments": appointments},
             encoder=AppointmentListEncoder,
         )
     else:
+        content = json.loads(request.body)
+        content["complete"] = False
         try:
-            content = json.loads(request.body)
-            vin_key = content["vin"]
-            automobile = AutomobileVO.objects.get(vin=vin_key)
-            content["automobile"] = automobile
-            technician_key = content["technician"]
-            print("content", content)
-            print("technician_key", technician_key)
-            technician_value = Technician.objects.get(id=technician_key)
-            print(technician_value)
-            content["technician"] = technician_value
-            print("technician_value", technician_value)
-            # content["id"] = random.randit(1,10000)
-            # content.remove("vin")
-            del content["vin"]
-            print("content", content)
+            try:
+                purchase = AutomobileVO.objects.get(vin=content["vin"])
+                content["purchased"] = True
+            except AutomobileVO.DoesNotExist:
+                content["purchased"] = False
+            technician = Technician.objects.get(id=content["technician"])
+            content["technician"] = technician
             appointment = Appointment.objects.create(**content)
             return JsonResponse(
                 appointment,
                 encoder=AppointmentListEncoder,
                 safe=False,
             )
-        except AutomobileVO.DoesNotExist:
-            return JsonResponse(
-                {"message": "Invalid vin id"},
-                status=400,
+        except Exception as e:
+            response = JsonResponse(
+                {"message": "Could not create an Appointment"}
             )
+            response.status_code = 400
+            return response
 
-            #use AutomobileVO.filter
-            #check if Automobile exists
-            #If it exists
-            # VIP == YES
-            #Else
 
-# @require_http_methods(["GET", "POST"])
-# def api_list_appointments(request):
-#     if request.method == "GET":
-#         appointments = Appointment.objects.all()
-#         return JsonResponse(
-#             {"appointments": appointments},
-#             encoder=AppointmentListEncoder,
-#         )
-#     else:
-#         content = json.loads(request.body)
-#         technician_key = content["technician"]
-#         technician_value = Technician.objects.get(id=technician_key)
-
-# @require_http_methods(["GET", "POST"])
-# def api_list_appointments(request, input_vin=None):
-#     if request.method == "GET":
-#         if input_vin is not None:
-#             appointments = Appointment.objects.filter(vin=input_vin)
-#         else:
-#             appointments = Appointment.objects.all()
-#         return JsonResponse(
-#             {"appointments": appointments},
-#             encoder=AppointmentListEncoder,
-#         )
-#     else:
-#         content = json.loads(request.body)
-#         try:
-#             try:
-#                 vip = AutomobileVO.objects.get(vin=content["vin"])
-#                 content["vip"] = True
-#             except AutomobileVO.DoesNotExist:
-#                 content["vip"] = False
-#             technician = Technician.objects.get(id=content["technician"])
-#             content["technician"] = technician
-#             service = Appointment.objects.create(**content)
-#             return JsonResponse(
-#                 service,
-#                 encoder=AppointmentListEncoder,
-#                 safe=False,
-#             )
-#         except:
-#             response = JsonResponse(
-#                 {"message": "Could not create the Service Appointment"}
-#             )
-#             response.status_code = 400
-#             return response
 
 
 @require_http_methods(["GET", "DELETE"])
@@ -143,7 +91,7 @@ def api_show_appointment_details(request, pk):
                 safe=False
             )
         except Appointment.DoesNotExist:
-            response = JsonResponse({"message": "Does not exist"})
+            response = JsonResponse({"message": "appointment does not exist"})
             response.status_code = 404
             return response
     elif request.method == "DELETE":
@@ -205,10 +153,12 @@ def api_service_history(request, vin):
             )
 
 
-@require_http_methods(["GET"])
+
 def api_list_auto_vos(request):
-    auto_vos = AutomobileVO.objects.all()
-    return JsonResponse(
+    if request.method == "GET":
+        auto_vos = AutomobileVO.objects.all()
+        return JsonResponse(
         {"autos": auto_vos},
-        encoder=AutomobileVOEncoder
+        encoder=AutomobileVOEncoder,
+        safe=False,
     )

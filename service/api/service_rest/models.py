@@ -4,9 +4,11 @@ from django.urls import reverse
 
 class AutomobileVO(models.Model):
     vin = models.CharField(max_length=17, unique=True)
+    import_href = models.CharField(max_length=200, null=True)
 
-    def __str__(self):
-        return self.vin
+
+
+
 
 
 class Technician(models.Model):
@@ -19,24 +21,17 @@ class Technician(models.Model):
 
 
 class Appointment(models.Model):
+    vin = models.CharField(max_length=17, null=True, unique=False)
+    owner_name = models.CharField(max_length=50)
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
+    reason = models.TextField(max_length=200)
+    purchased = models.BooleanField(null=True)
+    complete = models.BooleanField(null=True)
     technician = models.ForeignKey(
         Technician,
         related_name="technician",
         on_delete=models.CASCADE
     )
-    owner_name = models.CharField(max_length=50)
-    date = models.DateField(null=True)
-    time = models.TimeField(null=True)
-    automobile = models.ForeignKey(
-        AutomobileVO,
-        related_name="appointments",
-        on_delete=models.CASCADE
-    )
-    reason = models.TextField(max_length=200)
-    finished = models.BooleanField(null=True)
-    cancelled = models.BooleanField(default=False)
-    vip = models.BooleanField(null=True)
     def get_api_url(self):
         return reverse("show_appointment", kwargs={"pk": self.id})
-    def __str__(self):
-        return f"Appointment for {self.owner_name}, VIP {self.vip}"
