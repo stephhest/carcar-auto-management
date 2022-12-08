@@ -67,15 +67,24 @@ class SaleEncoder(ModelEncoder):
 
 ### VIEWS ###
 
-# LIST AUTO VOS
-# /api/automobiles/
+
+# LIST  AUTO VOS
+# /api/automobiles/<str:status>/
 @require_http_methods(["GET"])
-def api_list_auto_vos(request):
-    auto_vos = AutomobileVO.objects.all()
+def api_list_auto_vos(request, status=None):
+    if status is not None:
+        if status == "sold":
+            sold = True
+        elif status == "available":
+            sold = False
+        auto_vos = AutomobileVO.objects.filter(sold=sold)
+    else:
+        auto_vos = AutomobileVO.objects.all()
     return JsonResponse(
         {"autos": auto_vos},
         encoder=AutomobileVOEncoder
     )
+
 
 # LIST AND CREATE SALESPEOPLE
 # /api/salespeople/

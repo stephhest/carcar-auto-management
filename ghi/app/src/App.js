@@ -12,6 +12,7 @@ import ServiceAppointmentList from './ServiceAppointmentList';
 import TechnicianForm from './TechnicianForm';
 import SalesPersonForm from './SalesPersonForm';
 import CustomerForm from './CustomerForm';
+import SaleRecordForm from './SaleRecordForm';
 
 function App() {
   return (
@@ -36,9 +37,11 @@ function App() {
             <Route index element={<ServiceAppointmentList />} />
             <Route path="new" element={<ServiceAppointmentForm />} />
           </Route>
+          <Route path="/technicians/new" element={<TechnicianForm />} />
           <Route path="/salespeople/new" element={<SalesPersonForm />} />
           <Route path="/customers/new" element={<CustomerForm />} />
-          <Route path="/technicians/new" element={<TechnicianForm />} />
+          <Route path="/sales/new" element={<SaleRecordForm />} />
+
         </Routes>
       </div>
     </BrowserRouter>

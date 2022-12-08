@@ -4,6 +4,7 @@ from .views import api_list_sales, api_show_sale, api_list_auto_vos, api_list_sa
 
 urlpatterns = [
     path("automobiles/", api_list_auto_vos, name="api_list_auto_vos"),
+    path("automobiles/<str:status>/", api_list_auto_vos, name="api_list_auto_vos"),
 
     path("salespeople/", api_list_salespeople, name="api_create_salespeople"),
 
