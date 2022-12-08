@@ -3,8 +3,6 @@ from django.urls import reverse
 
 
 class AutomobileVO(models.Model):
-    color = models.CharField(max_length=20)
-    year = models.PositiveSmallIntegerField()
     vin = models.CharField(max_length=17, unique=True)
 
     def __str__(self):
@@ -35,9 +33,9 @@ class Appointment(models.Model):
         on_delete=models.CASCADE
     )
     reason = models.TextField(max_length=200)
-    finished = models.BooleanField()
+    finished = models.BooleanField(null=True)
     cancelled = models.BooleanField(default=False)
-    vip = models.BooleanField(default=False)
+    vip = models.BooleanField(null=True)
     def get_api_url(self):
         return reverse("show_appointment", kwargs={"pk": self.id})
     def __str__(self):

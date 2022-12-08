@@ -1,49 +1,89 @@
-// import { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import './index.css';
+import React from 'react';
 
-// const ManufacturerList = () => {
-//     const [manufacturers, setManufacturers] = useState([]);
 
-//     useEffect(() => {
-//         const manufacturersURL = 'http://localhost:8100/api/manufacturers/';
-//         fetch(manufacturersURL)
-//         .then(response => response.json())
-//         .then(data => {setManufacturers(data.manufacturers);})
-//         .catch(e => console.log('Manufacturer fetch error: ', e));
-//     }, [])
+class ServiceAppointmentList extends React.Component {
+    constructor(props) {
+        super(props)
 
-//     return (
-//         <>
-//             < br/>
-//             <h1>Manufacturer List</h1>
-//             <table className="table table-striped">
-//                 <thead>
-//                     <tr>
-//                         <th>Manufacturer</th>
-//                         {/* <th>Actions</th> */}
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {manufacturers.map(manufacturer => {
+        this.state = {
+            appointments: [],
+        }
+        this.fetchAppointments = this.fetchAppointments.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+    }
 
-//                         return (
-//                             <tr key={manufacturer.href}>
-//                                 <td>{manufacturer.name}</td>
-//                                 {/* <td>
-//                                     <button onClick={() => onDeleteAutoClick(auto)}>X</button>
-//                                     <span>{auto.style}</span>
-//                                 </td> */}
-//                             </tr>
-//                         );
-//                     })}
-//                 </tbody>
-//             </table>
-//             <Link to="/manufactures/new">
-//                 <button className="btn btn-success">Add Manufacturer</button>
-//             </Link>
-//         </>
-//     );
-// };
+    componentDidMount() {
+        this.fetchAppointments();
+    }
 
-// export default ManufacturerList;
+    async handleDelete(id){
+        const serviceUrl = `http://localhost:8080/api/appointments/${id}/`;
+        const fetchConfig = {
+          method: "delete",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        const response = await fetch(serviceUrl, fetchConfig);
+        if (response.ok) {
+          const deleteService = await response.json();
+          console.log(deleteService);
+          this.fetchAppointments();
+        }
+    }
+
+    async fetchAppointments() {
+        const response = await fetch('http://localhost:8080/api/appointments/')
+        if (response.ok) {
+            const data = await response.json()
+            this.setState({appointments: data.appointments})
+        }
+    }
+
+    render() {
+        return (
+            <table className="table table-striped">
+                <thead>
+                    <tr>
+                        <th>VIN</th>
+                        <th>Customer name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Technician</th>
+                        <th>Reason</th>
+                        <th>Cancel</th>
+                        <th>Finished</th>
+                        <th>VIP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.state.appointments.map(appointment => {
+                        console.log(appointment)
+                        let vip = ""
+                        if(appointment.vip === true){
+                            vip = "Yes"
+                        } else {
+                            vip = "No"
+                        }
+                        return (
+                            <tr key={appointment.id}>
+                                <td>{appointment.automobile.vin}</td>
+                                <td>{appointment.owner_name}</td>
+                                <td>{appointment.date}</td>
+                                <td>{appointment.time}</td>
+                                <td>{appointment.technician.name}</td>
+                                <td>{appointment.reason}</td>
+                                <td><button onClick={() => this.handleDelete(appointment.id)} className="btn btn-danger">Cancel</button></td>
+                                <td><button onClick={() => this.handleDelete(appointment.id)} className="btn btn-success">Finished</button></td>
+                                <td>{vip}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+
+    );
+    }
+}
+
+export default ServiceAppointmentList;

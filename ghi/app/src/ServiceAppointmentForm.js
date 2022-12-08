@@ -1,105 +1,149 @@
-// import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-// const AutoForm = () => {
+class ServiceAppointmentForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      vin: '',
+      ownerName: '',
+      date: '',
+      time: '',
+      reason: '',
+      technician: '',
+      technicians: [],
+    };
+    this.handleVinChange = this.handleVinChange.bind(this);
+    this.handleOwnerNameChange = this.handleOwnerNameChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleTimeChange = this.handleTimeChange.bind(this);
+    this.handleReasonChange = this.handleReasonChange.bind(this);
+    this.handleTechnicianChange = this.handleTechnicianChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-//     const [color, setColor] = useState('');
-//     const [year, setYear] = useState('');
-//     const [vin, setVin] = useState('');
-//     const [model_id, setModel] = useState('');
-//     const [models, setModels] = useState([]);
+    async handleSubmit(event) {
+      event.preventDefault();
+      const data = {...this.state};
+      data.owner_name = data.ownerName;
+      delete data.ownerName;
+      delete data.technicians;
+      console.log(data)
 
-//     useEffect(() => {
-//         const modelUrl = 'http://localhost:8100/api/models/';
-//         fetch(modelUrl)
-//             .then(response => response.json())
-//             .then(data => setModels(data.models))
-//             .catch(e => console.error("Fetch models error: ", e))
-//     }, [])
+      const serviceUrl = 'http://localhost:8080/api/appointments/';
+      const fetchConfig = {
+        method: "post",
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const response = await fetch(serviceUrl, fetchConfig);
+      if (response.ok) {
+        const newServiceAppointment = await response.json();
+        console.log(newServiceAppointment);
 
-//     const handleSubmit = (event) => {
-//         event.preventDefault();
-//         const newAuto = {
-//             'color': color,
-//             'year': year,
-//             'vin': vin,
-//             'model_id': model_id,
-//         }
-//         // console.log(newAuto);
-//         const carUrl = 'http://localhost:8100/api/automobiles/';
-//         const fetchConfig = {
-//             method: "post",
-//             body: JSON.stringify(newAuto),
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         }
-//         fetch(carUrl, fetchConfig)
-//             .then(response => response.json())
-//             .then(() => {
-//                 setColor('');
-//                 setYear('');
-//                 setVin('');
-//                 setModel('');
-//             })
-//             .catch(e => console.log('Auto fetch error: ', e))
-//         // add some success alert here
-//     }
+        const cleared = {
+          vin: '',
+          ownerName: '',
+          date: '',
+          time: '',
+          reason: '',
+          technician: '',
+        };
+        this.setState(cleared);
+      }
+    }
 
+  handleVinChange(event) {
+    const value = event.target.value;
+    this.setState({ vin: value })
+  }
 
-//     const handleChangeColor = (event) => {
-//         const value = event.target.value;
-//         setColor(value);
-//     }
+  handleOwnerNameChange(event) {
+    const value = event.target.value;
+    this.setState({ ownerName: value })
+  }
 
-//     const handleChangeYear = (event) => {
-//         const value = event.target.value;
-//         setYear(value);
-//     }
+  handleDateChange(event) {
+    const value = event.target.value;
+    this.setState({ date: value })
+  }
 
-//     const handleChangeVin = (event) => {
-//         const value = event.target.value;
-//         setVin(value);
-//     }
+  handleTimeChange(event) {
+    const value = event.target.value;
+    this.setState({ time: value });
+  }
 
-//     const handleChangeModel = (event) => {
-//         const value = event.target.value;
-//         setModel(value);
-//     }
+  handleReasonChange(event) {
+    const value = event.target.value;
+    this.setState({ reason: value });
+   }
 
-//     return (
-//         <div className="my-5 container">
-//           <div className="offset-3 col-6">
-//             <div className="shadow p-4 mt-4">
-//               <h1>Add an Automobile to Inventory</h1>
-//               <form onSubmit={handleSubmit} id="create-automobile-form">
-//                 <div className="form-floating mb-3">
-//                   <input onChange={handleChangeColor} value={color}  placeholder="Color" required type="text" name="color" id="color" className="form-control" />
-//                   <label htmlFor="color">Color</label>
-//                 </div>
-//                 <div className="form-floating mb-3">
-//                   <input onChange={handleChangeYear} value={year}  placeholder="Year" required type="number" name="year" id="year" className="form-control" />
-//                   <label htmlFor="year">Year</label>
-//                 </div>
-//                 <div className="form-floating mb-3">
-//                   <input onChange={handleChangeVin} value={vin}  placeholder="VIN" required type="text" name="vin" id="vin" className="form-control" />
-//                   <label htmlFor="vin">VIN</label>
-//                 </div>
-//                 <div className="mb-3">
-//                   <select onChange={handleChangeModel} value={model_id} required name="model" id="model" className="form-select">
-//                     <option value="">Choose a model</option>
-//                     {models.map(model => {
-//                       return (
-//                         <option key={model.id} value={model.id}>{model.manufacturer.name} {model.name}</option>
-//                       )
-//                     })}
-//                   </select>
-//                 </div>
-//                 <button className="btn btn-primary">Create</button>
-//               </form>
-//             </div>
-//           </div>
-//         </div>
-//     );
-// }
+  handleTechnicianChange(event) {
+      const value = event.target.value;
+	  console.log(event)
+	  console.log(event.target.value)
+      this.setState({technician: value });
+    }
 
-// export default AutoForm;
+  async componentDidMount() {
+      const url = 'http://localhost:8080/api/technicians/';
+
+      const response = await fetch(url);
+		console.log(response)
+      if (response.ok) {
+        const data = await response.json();
+		console.log(data)
+        this.setState({technicians: data.technician});
+      }
+    }
+
+    render() {
+		return (
+			<div className="row">
+			  <div className="offset-3 col-6">
+				<div className="shadow p-4 mt-4">
+				  <h1>Create a new service appointment</h1>
+				  <form onSubmit={this.handleSubmit} id="create-service-appointment-form" >
+					<div className="form-floating mb-3">
+					  <input value={this.state.vin} onChange={this.handleVinChange} placeholder="vin" required type="text" name="vin" id="vin" className="form-control" />
+					  <label htmlFor="vin">Vin</label>
+					</div>
+					<div className="form-floating mb-3">
+					  <input value={this.state.ownerName} onChange={this.handleOwnerNameChange} placeholder="ownerName" required type="text" name="ownerName" id="ownerName" className="form-control" />
+					  <label htmlFor="ownerName">OwnerName</label>
+					</div>
+					<div className="form-floating mb-3">
+					  <input value={this.state.date} onChange={this.handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
+					  <label htmlFor="date">Date</label>
+					</div>
+					<div className="form-floating mb-3">
+					  <input value={this.state.time} onChange={this.handleTimeChange} placeholder="time" required type="time" name="time" id="time" className="form-control" />
+					  <label htmlFor="time">Time</label>
+					</div>
+					<div className="form-floating mb-3">
+					  <textarea value={this.state.reason} onChange={this.handleReasonChange} placeholder="reason" name="reason" id="reason" className="form-control" rows="3"/>
+					  <label htmlFor="reason" className="form-label">reason</label>
+					</div>
+					<div className="mb-3">
+					  <select value={this.state.technician} onChange={this.handleTechnicianChange} required name="technician" id="technician" className="form-select">
+						{/* <option value="">Choose a technician</option> */}
+						{this.state.technicians.map(technician => {
+						  return (
+							<option key={technician.id} value={technician.id}>
+							  {technician.name}
+							</option>
+						  );
+						})}
+					  </select>
+					</div>
+					<button className="btn btn-primary">Create</button>
+				  </form>
+				</div>
+			</div>
+		</div>
+        )
+	}
+}
+
+export default ServiceAppointmentForm;
