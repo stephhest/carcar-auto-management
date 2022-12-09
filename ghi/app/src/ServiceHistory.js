@@ -15,7 +15,7 @@ class ServiceHistory extends React.Component {
         event.preventDefault();
         const data = { ...this.state };
 
-        const vinUrl = `http://localhost:8080/api/appointments/${data.vin}`;
+        const vinUrl = `http://localhost:8080/api/appointments/`;
         const response = await fetch(vinUrl);
         if (response.ok) {
             const vins = await response.json();
