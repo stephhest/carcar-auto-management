@@ -10,7 +10,7 @@ const ManufacturerList = () => {
         fetch(manufacturersURL)
         .then(response => response.json())
         .then(data => {setManufacturers(data.manufacturers);})
-        .catch(e => console.log('Manufacturer fetch error: ', e));
+        .catch(e => console.error('Manufacturer fetch error: ', e));
     }, [])
 
     return (

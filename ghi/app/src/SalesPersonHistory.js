@@ -49,7 +49,6 @@ const SalesPersonHistory = () => {
             <thead>
                 <tr>
                     <th>Sales Person</th>
-                    <th>Employee Number</th>
                     <th>Customer</th>
                     <th>VIN</th>
                     <th>Sale Price</th>
@@ -60,7 +59,6 @@ const SalesPersonHistory = () => {
                     return (
                         <tr key={sale.href}>
                             <td>{sale.sales_person}</td>
-                            <td>{sale.employee_number}</td>
                             <td>{sale.customer}</td>
                             <td>{sale.automobile}</td>
                             <td>${sale.sale_price}</td>

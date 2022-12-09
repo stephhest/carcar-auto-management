@@ -16,7 +16,7 @@ const AutosList = () => {
         fetch(autosURL)
             .then(response => response.json())
             .then(data => {setAutos(data.autos);})
-            .catch(e => console.log('Auto fetch error: ', e));
+            .catch(e => console.error('Auto fetch error: ', e));
     }, [])
 
     const handleChangeStatus = (event) => {
@@ -28,7 +28,7 @@ const AutosList = () => {
         fetch(filterAutoUrl)
             .then(response => response.json())
             .then(data => setAutos(data.autos))
-            .catch(e => console.log('Filtered auto fetch error: ', e))
+            .catch(e => console.error('Filtered auto fetch error: ', e))
     }
 
     return (
@@ -60,7 +60,6 @@ const AutosList = () => {
                 </thead>
                 <tbody>
                     {autos.map(auto => {
-                        // {console.log(auto)}
                         return (
                             <tr key={auto.vin}>
                                 <td>{auto.vin}</td>

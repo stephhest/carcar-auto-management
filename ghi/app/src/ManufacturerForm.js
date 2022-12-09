@@ -7,7 +7,7 @@ const ManufacturerForm = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const newManufacturer = { "name": name };
-        // console.log(newManufacturer);
+
         const manufacturerUrl = 'http://localhost:8100/api/manufacturers/';
         const fetchConfig = {
             method: "post",
@@ -17,12 +17,14 @@ const ManufacturerForm = () => {
             },
         }
         fetch(manufacturerUrl, fetchConfig)
-            .then(response => response.json)
-            .then(() => {
-                setName('');
+            .then((response) => {
+                if (!response.ok) {
+                    alert('Submission Error: Manufacturer name must be unique');
+                } else {
+                    alert('New manufacturer added!');
+                }
             })
-            .catch(e => console.log('Manufacturer fetch error: ', e))
-        //add some success alert here
+            .catch(e => console.error('Manufacturer fetch error: ', e))
     }
 
     const handleChangeName = (event) => {

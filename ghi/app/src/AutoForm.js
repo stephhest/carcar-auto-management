@@ -24,7 +24,7 @@ const AutoForm = () => {
             'vin': vin,
             'model_id': model_id,
         }
-        // console.log(newAuto);
+
         const carUrl = 'http://localhost:8100/api/automobiles/';
         const fetchConfig = {
             method: "post",

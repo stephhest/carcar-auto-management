@@ -13,7 +13,6 @@ const CustomerForm = () => {
             "address": address,
             "phone": phone,
         };
-        // console.log(newCustomer);
         const customerUrl = 'http://localhost:8090/api/customers/';
         const fetchConfig = {
             method: "post",
