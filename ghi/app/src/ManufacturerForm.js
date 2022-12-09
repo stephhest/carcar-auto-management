@@ -20,9 +20,10 @@ const ManufacturerForm = () => {
             .then((response) => {
                 if (!response.ok) {
                     alert('Submission Error: Manufacturer name must be unique');
-                } else {
-                    alert('New manufacturer added!');
                 }
+            })
+            .then(() => {
+                setName('');
             })
             .catch(e => console.error('Manufacturer fetch error: ', e))
     }

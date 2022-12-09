@@ -24,8 +24,6 @@ const SalesPersonForm = () => {
             .then((response) => {
                 if (!response.ok) {
                     alert('Submission Error: Employee Number must be unique');
-                } else {
-                    alert('New sales person added!');
                 }
             })
             .then(() => {

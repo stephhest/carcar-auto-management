@@ -26,8 +26,6 @@ const CustomerForm = () => {
             .then((response) => {
                 if (!response.ok) {
                     alert('Submission Error: Please try again');
-                } else {
-                    alert('New customer added!');
                 }
             })
             .then(() => {

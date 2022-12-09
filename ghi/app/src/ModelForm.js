@@ -39,7 +39,6 @@ const ModelForm = () => {
                 setManufacturer('');
             })
             .catch(e => console.error('Model fetch error: ', e))
-        //add some success alert here
     }
 
     const handleChangeName = (event) => {

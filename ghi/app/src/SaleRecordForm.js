@@ -57,8 +57,6 @@ const SaleRecordForm = () => {
             .then((response) => {
                 if (!response.ok) {
                     alert('Submission Error: Please try again');
-                } else {
-                    alert('New sale record added!');
                 }
              })
             .then(() => {

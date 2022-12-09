@@ -37,9 +37,7 @@ const AutoForm = () => {
             .then((response) => {
               if (!response.ok) {
                   alert('Submission Error: VIN must be unique');
-              } else {
-                  alert('New automobile added!');
-              }
+              } 
             })
             .then(() => {
                 setColor('');
