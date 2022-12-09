@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 const TechnicianForm = () => {
-  // Use the useState hook to create local state variables
-  // for the technician name, employee number, and any errors that occur
   const [name, setName] = useState('');
   const [employeeNumber, setEmployeeNumber] = useState('');
 
 
-  // Define a function to handle the form submission
   const handleSubmit = event => {
-    // Prevent the default form submission behavior
     event.preventDefault();
 
-    // Create the data object that will be sent to the API
     const newTechnician = {
         "name": name,
         "employee_number": employeeNumber,
