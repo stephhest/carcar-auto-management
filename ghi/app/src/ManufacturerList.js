@@ -16,12 +16,16 @@ const ManufacturerList = () => {
     return (
         <>
             < br/>
-            <h1>Manufacturer List</h1>
+            <div id="heading">
+                <h1>Manufacturer List</h1>
+                <Link to="/manufacturers/new">
+                    <button id="addbutton" className="btn btn-success">Add Manufacturer</button>
+                </Link>
+            </div>
             <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Manufacturer</th>
-                        {/* <th>Actions</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -30,18 +34,12 @@ const ManufacturerList = () => {
                         return (
                             <tr key={manufacturer.href}>
                                 <td>{manufacturer.name}</td>
-                                {/* <td>
-                                    <button onClick={() => onDeleteAutoClick(auto)}>X</button>
-                                    <span>{auto.style}</span>
-                                </td> */}
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
-            <Link to="/manufacturers/new">
-                <button className="btn btn-success">Add Manufacturer</button>
-            </Link>
+
         </>
     );
 };

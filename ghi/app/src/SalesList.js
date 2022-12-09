@@ -20,7 +20,12 @@ const SalesList = () => {
     return (
         <>
         < br/>
-        <h1>All Sales</h1>
+        <div id="heading">
+            <h1>All Sales</h1>
+            <Link to="/sales/new">
+                    <button id="addbutton" className="btn btn-success">Create Sale Record</button>
+            </Link>
+        </div>
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -45,9 +50,6 @@ const SalesList = () => {
                 })}
             </tbody>
         </table>
-        <Link to="/sales/new">
-                <button className="btn btn-success">Create Sale Record</button>
-        </Link>
         </>
     )
 }

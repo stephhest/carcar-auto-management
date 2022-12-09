@@ -16,14 +16,18 @@ const ModelList = () => {
     return (
         <>
             < br/>
-            <h1>Vehicle Models</h1>
+            <div id="heading">
+                <h1>Vehicle Models</h1>
+                <Link to="/models/new">
+                    <button id="addbutton" className="btn btn-success">Add Vehicle Model</button>
+                </Link>
+            </div>
             <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Manufacturer</th>
                         <th>Picture</th>
-                        {/* <th>Actions</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -35,18 +39,11 @@ const ModelList = () => {
                                 <td>
                                     <img className="img-thumbnail" src={model.picture_url} width="300" height="236"/>
                                 </td>
-                                {/* <td>
-                                    <button onClick={() => onDeleteAutoClick(auto)}>X</button>
-                                    <span>{auto.style}</span>
-                                </td> */}
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
-            <Link to="/models/new">
-                <button className="btn btn-success">Add A Vehicle Model</button>
-            </Link>
         </>
     );
 };

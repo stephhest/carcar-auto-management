@@ -1,8 +1,8 @@
 # CarCar
 
 Team:
-* Stephanie - Sales
-* Kayre - Service
+* Stephanie Hestilow - Sales
+* Kayre Santos - Service
 
 ## Instructions to run project
 1. Fork and clone the project from: https://gitlab.com/kayresantos/project-beta
@@ -10,10 +10,11 @@ Team:
 3. Open up a command terminal and cd into your project directory
     In your command terminal type:
 
-    - git clone <>
-    - docker volume create beta-data (this command creates the data for docker)
-    - docker-compose build (this command builds the containers for docker)
-    - docker-compose up (this command runds the docker containers)
+    - `git clone <HTTPS Link>`
+    - `docker volume create beta-data` (this command creates the data for docker)
+    - `docker-compose build` (this command builds the containers for docker)
+    - `docker-compose up` (this command runds the docker containers)
+
 4. Open up Docker Desktop and ensure all containers are running without errors
 5. Create data Insomnia using the routes and test data below (see CRUD ROUTE DOCUMENTATION and TEST DATA)
 6. To see and engage with the app, open up google chrome and type http://localhost:3000
@@ -78,6 +79,13 @@ CarCar Design")
 - Poller
     - Consumer will poll Automobile data in the inventory api.  For each Automobile object in inventory, the Sales poller will either update or create a new "AutomobileVO" with the corresponding data, using "create_or_update()" method.
     - Poller will poll URL http://inventory-api:8000/api/automobiles/
+- Forms
+    - Create Customer -> Adds a new customer in the database
+    - Create Sales Person -> Adds a new sales person in the database (must have unique employee number)
+    - Create Sale Record -> Adds a new sale record in the database (associated autoVO must be NOT be sold)
+- List Views
+    - List All Sales -> Shows all existing sales in the database
+    - List Sales Person History -> Shows all sales by a selected sales person
 
 
 
@@ -105,7 +113,78 @@ CarCar Design")
 | Sales        | List sales by sales person                     | GET    | http://localhost:8090/api/sales/salespeople/int:employee_number |
 
 
-## Sample JSON Body Data / Responses
-- Inventory
-- Service
-- Sales
+# Sample JSON Body Data
+
+Create Manufacturer
+```
+{
+    "name": "Chrysler"
+}
+```
+
+Create Vehicle Model
+```
+{
+    "name": "Sebring",
+    "picture_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Chrysler_Sebring_front_20090302.jpg/320px-Chrysler_Sebring_front_20090302.jpg",
+    "manufacturer_id": 1
+}
+```
+
+Create Automobile
+```
+{
+    "color": "red",
+    "year": 2012,
+    "vin": "1C3CC5FB2AN120174",
+    "model_id": 1
+}
+```
+
+Create Technician
+```
+{
+    "name": "John Doe",
+    "employee_number": 1,
+}
+```
+
+Create Service Appointment
+```
+{
+    "vin": "1C3CC5FB2AN120174",
+    "owner_name": "Jane Doe",
+    "date": "2022-12-16",
+    "time": "10:00:00",
+    "reason": "Tune up",
+    "technician": 1
+}
+```
+
+Create Sales Person
+```
+{
+    "name": "Joe Donaldson",
+    "employee_number": 1
+}
+```
+
+Create Potential Customer
+```
+{
+    "name": "Noor Sayid-Alexanderson",
+    "address": "987 Strawberry Hill",
+    "phone": "5556875309"
+}
+```
+
+Create Sale Record
+```
+{
+    "sale_price": 20000,
+    "sales_person": 1,
+    "automobile": "1C3CC5FB2AN120174",
+    "customer": 1
+}
+```
+

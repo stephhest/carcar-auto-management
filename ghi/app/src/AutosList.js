@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import './index.css';
 
 const AutosList = () => {
     const [autos, setAutos] = useState([]);
@@ -33,12 +33,12 @@ const AutosList = () => {
 
     return (
         <>
-            < br/>
+        < br/>
+        <div id="heading">
             <form id="auto-inventory">
                 <div className="mb-3">
-                    <label>Filter View</label>
                     <select onChange={handleChangeStatus} value={status} name="status" id="status" className="form-select">
-                    <option value="">All</option>
+                    <option value="">View All</option>
                     {Options.map(option => {
                         return (
                         <option key={option.value} value={option.value}> {option.label} </option>
@@ -47,6 +47,11 @@ const AutosList = () => {
                     </select>
                 </div>
             </form>
+            <Link to="/automobiles/new">
+                <button id="addbutton" className="btn btn-success">Add Automobile</button>
+            </Link>
+        </div>
+
             <h1>Automobile Inventory</h1>
             <table className="table table-striped">
                 <thead>
@@ -72,9 +77,6 @@ const AutosList = () => {
                     })}
                 </tbody>
             </table>
-            <Link to="/automobiles/new">
-                <button className="btn btn-success">Add Automobile</button>
-            </Link>
         </>
     );
 };
