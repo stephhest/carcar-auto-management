@@ -27,7 +27,6 @@ class ServiceAppointmentForm extends React.Component {
       data.owner_name = data.ownerName;
       delete data.ownerName;
       delete data.technicians;
-      console.log(data)
 
       const serviceUrl = 'http://localhost:8080/api/appointments/';
       const fetchConfig = {
@@ -40,7 +39,6 @@ class ServiceAppointmentForm extends React.Component {
       const response = await fetch(serviceUrl, fetchConfig);
       if (response.ok) {
         const newServiceAppointment = await response.json();
-        console.log(newServiceAppointment);
 
         const cleared = {
           vin: '',
@@ -81,8 +79,6 @@ class ServiceAppointmentForm extends React.Component {
 
   handleTechnicianChange(event) {
       const value = event.target.value;
-	  console.log(event)
-	  console.log(event.target.value)
       this.setState({technician: value });
     }
 
@@ -90,10 +86,8 @@ class ServiceAppointmentForm extends React.Component {
       const url = 'http://localhost:8080/api/technicians/';
 
       const response = await fetch(url);
-		console.log(response)
       if (response.ok) {
         const data = await response.json();
-		console.log(data)
         this.setState({technicians: data.technician});
       }
     }
