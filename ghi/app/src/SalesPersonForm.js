@@ -26,7 +26,7 @@ const SalesPersonForm = () => {
                 setName('');
                 setEmployeeNumber('');
             })
-            .catch(e => console.log('Salespeople fetch error: ', e))
+            .catch(e => console.error('Salespeople fetch error: ', e))
         //add some success alert here
     }
 
@@ -44,7 +44,7 @@ const SalesPersonForm = () => {
         <div className="my-5 container">
             <div className="offset-3 col-6">
                 <div className="shadow p-4 mt-4">
-                    <h1>Create a new Sales Person</h1>
+                    <h1>Add a Sales Person</h1>
                     <form onSubmit={handleSubmit} id="create-salesperson-form">
                         <div className="form-floating mb-3">
                             <input onChange={handleChangeName} value={name} placeholder="name" required type="text" name="name" id="name" className="form-control" />
