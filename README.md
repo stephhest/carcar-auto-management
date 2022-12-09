@@ -105,7 +105,32 @@ CarCar Design")
 | Sales        | List sales by sales person                     | GET    | http://localhost:8090/api/sales/salespeople/int:employee_number |
 
 
-## Sample JSON Body Data / Responses
-- Inventory
+# Sample JSON Body Data for POST
+<details>
+<summary>Inventory (click to expand)</summary>
+Create Manufacturer
+```
+{
+  "name": "Chrysler"
+}
+```
+Create Vehicle Model
+```
+{
+  "name": "Sebring",
+  "picture_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Chrysler_Sebring_front_20090302.jpg/320px-Chrysler_Sebring_front_20090302.jpg",
+  "manufacturer_id": 1
+}
+```
+Create Automobile
+```
+{
+  "color": "red",
+  "year": 2012,
+  "vin": "1C3CC5FB2AN120174",
+  "model_id": 1
+}
+```
+</details>
 - Service
 - Sales
