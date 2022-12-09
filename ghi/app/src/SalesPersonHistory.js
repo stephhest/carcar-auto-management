@@ -32,18 +32,23 @@ const SalesPersonHistory = () => {
     return (
         <>
         < br/>
-        <form id="sales-person-history">
-            <div className="mb-3">
-                <select onChange={handleChangeSalesPerson} value={sales_person} name="sales_person" id="sales_person" className="form-select">
-                <option value="">Select a Sales Person</option>
-                {salespeople.map(sales_person => {
-                    return (
-                    <option key={sales_person.employee_number} value={sales_person.employee_number}> #{sales_person.employee_number} - {sales_person.name} </option>
-                    )
-                })}
-                </select>
-            </div>
-        </form>
+        <div id="heading">
+            <form id="sales-person-history">
+                <div className="mb-3">
+                    <select onChange={handleChangeSalesPerson} value={sales_person} name="sales_person" id="sales_person" className="form-select">
+                    <option value="">Select a Sales Person</option>
+                    {salespeople.map(sales_person => {
+                        return (
+                        <option key={sales_person.employee_number} value={sales_person.employee_number}> #{sales_person.employee_number} - {sales_person.name} </option>
+                        )
+                    })}
+                    </select>
+                </div>
+            </form>
+            <Link to="/salespeople/new">
+                <button id="addbutton" className="btn btn-success">Add Sales Person</button>
+            </Link>
+        </div>
         <h1>Sales Person History</h1>
         <table className="table table-striped">
             <thead>
@@ -67,9 +72,6 @@ const SalesPersonHistory = () => {
                 })}
             </tbody>
         </table>
-        <Link to="/salespeople/new">
-                <button className="btn btn-success">Add Sales Person</button>
-            </Link>
         </>
     )
 }

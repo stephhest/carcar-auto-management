@@ -59,7 +59,7 @@ class ServiceAppointmentList extends React.Component {
                 <tbody>
                     {this.state.appointments.map(appointment => {
                         let vip = ""
-                        if(appointment.vip === true){
+                        if(appointment.purchased === true){
                             vip = "Yes"
                         } else {
                             vip = "No"

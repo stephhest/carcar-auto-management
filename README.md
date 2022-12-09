@@ -1,8 +1,8 @@
 # CarCar
 
 Team:
-* Stephanie - Sales
-* Kayre - Service
+* Stephanie Hestilow - Sales
+* Kayre Santos - Service
 
 ## Instructions to run project
 1. Fork and clone the project from: https://gitlab.com/kayresantos/project-beta
