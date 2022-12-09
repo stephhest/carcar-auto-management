@@ -12,7 +12,7 @@ const SaleRecordForm = () => {
 
 
     useEffect(() => {
-        const autoUrl = 'http://localhost:8090/api/automobiles/available/'
+        const autoUrl = 'http://localhost:8090/api/automobiles/available'
         fetch(autoUrl)
             .then(response => response.json())
             .then(data => setAutoVOs(data.autos))
@@ -44,7 +44,7 @@ const SaleRecordForm = () => {
             'customer': customer,
             'sale_price': sale_price,
         }
-        console.log(newSale);
+
         const saleUrl = 'http://localhost:8090/api/sales/'
         const fetchConfig = {
             method: 'post',
@@ -54,14 +54,21 @@ const SaleRecordForm = () => {
             },
         }
         fetch(saleUrl, fetchConfig)
-            .then(response => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    alert('Submission Error: Please try again');
+                } else {
+                    alert('New sale record added!');
+                }
+             })
             .then(() => {
                 setAutomobile('');
                 setSalesPerson('');
                 setCustomer('');
                 setSalePrice('');
             })
-            .catch(e => console.log('Sale fetch error: ', e))
+            .catch(e => console.error('Sale fetch error: ', e))
+
     }
 
 
@@ -93,7 +100,7 @@ const SaleRecordForm = () => {
               <form onSubmit={handleSubmit} id="create-salerecord-form">
                 <div className="mb-3">
                   <select onChange={handleChangeAuto} value={automobile} required name="automobile" id="automobile" className="form-select">
-                    <option value="">Select an Available VIN</option>
+                    <option value="">Select Available VIN</option>
                     {autoVOs.map(autoVO => {
                       return (
                         <option key={autoVO.vin} value={autoVO.vin}> {autoVO.vin}</option>
@@ -103,7 +110,7 @@ const SaleRecordForm = () => {
                 </div>
                 <div className="mb-3">
                   <select onChange={handleChangeSalesPerson} value={sales_person} required name="sales_person" id="sales_person" className="form-select">
-                    <option value="">Select a Sales Person</option>
+                    <option value="">Select Sales Person</option>
                     {salespeople.map(sales_person => {
                       return (
                         <option key={sales_person.employee_number} value={sales_person.employee_number}> #{sales_person.employee_number} - {sales_person.name} </option>
@@ -113,7 +120,7 @@ const SaleRecordForm = () => {
                 </div>
                 <div className="mb-3">
                   <select onChange={handleChangeCustomer} value={customer} required name="customer" id="customer" className="form-select">
-                    <option value="">Select a Customer</option>
+                    <option value="">Select Customer</option>
                     {customers.map(customer => {
                       return (
                         <option key={customer.id} value={customer.id}> {customer.name} </option>

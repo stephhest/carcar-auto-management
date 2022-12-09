@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import './index.css';
 
 
-const AllSales = () => {
+const SalesList = () => {
     const [sales, setSales] = useState([]);
 
 
@@ -33,21 +33,23 @@ const AllSales = () => {
             </thead>
             <tbody>
                 {sales.map(sale => {
-                    // {console.log(sale)}
                     return (
                         <tr key={sale.href}>
                             <td>{sale.sales_person}</td>
                             <td>{sale.employee_number}</td>
                             <td>{sale.customer}</td>
                             <td>{sale.automobile}</td>
-                            <td>{sale.sale_price}</td>
+                            <td>${sale.sale_price}</td>
                         </tr>
                     );
                 })}
             </tbody>
         </table>
+        <Link to="/sales/new">
+                <button className="btn btn-success">Create Sale Record</button>
+        </Link>
         </>
     )
 }
 
-export default AllSales;
+export default SalesList;

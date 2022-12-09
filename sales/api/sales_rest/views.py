@@ -17,7 +17,10 @@ class AutomobileVOEncoder(ModelEncoder):
         "vin",
         "color",
         "year",
-        "sold"
+        "sold",
+        "manufacturer_name",
+        "model_name",
+        "picture_url"
     ]
 
 
@@ -45,16 +48,7 @@ class SaleEncoder(ModelEncoder):
     properties = [
         "id",
         "sale_price",
-        # "sales_person",
-        # "automobile",
-        # "customer"
     ]
-    encoders = {
-        # "sales_person": SalesPersonEncoder(),
-        # "automobile": AutomobileVOEncoder(),
-        # "customer": CustomerEncoder(),
-    }
-
     def get_extra_data(self, o):
         return {
             "automobile": o.automobile.vin,
@@ -134,7 +128,8 @@ def api_list_customers(request):
 
 # LIST AND CREATE SALES
 # /api/sales
-# /api/salespeople/<int:employee_number>/sales
+# /api/sales/salespeople/
+# /api/sales/salespeople/<int:employee_number>
 @require_http_methods(["GET", "POST"])
 def api_list_sales(request, employee_number=None):
     if request.method == "GET":

@@ -34,15 +34,20 @@ const AutoForm = () => {
             },
         }
         fetch(carUrl, fetchConfig)
-            .then(response => response.json())
+            .then((response) => {
+              if (!response.ok) {
+                  alert('Submission Error: VIN must be unique');
+              } else {
+                  alert('New automobile added!');
+              }
+            })
             .then(() => {
                 setColor('');
                 setYear('');
                 setVin('');
                 setModel('');
             })
-            .catch(e => console.log('Auto fetch error: ', e))
-        // add some success alert here
+            .catch(e => console.error('Error: ', e))
     }
 
 

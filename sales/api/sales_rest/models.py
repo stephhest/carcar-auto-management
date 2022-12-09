@@ -9,6 +9,10 @@ class AutomobileVO(models.Model):
     year = models.PositiveSmallIntegerField()
     vin = models.CharField(max_length=17, unique=True)
 
+    picture_url = models.URLField(null=True)
+    manufacturer_name = models.CharField(max_length=100, null=True)
+    model_name = models.CharField(max_length=100, null=True)
+
     sold = models.BooleanField(default=False)
 
     def get_api_url(self):

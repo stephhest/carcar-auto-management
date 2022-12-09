@@ -22,15 +22,21 @@ const CustomerForm = () => {
                 'Content-Type': 'application/json',
             },
         }
+
         fetch(customerUrl, fetchConfig)
-            .then(response => response.json)
+            .then((response) => {
+                if (!response.ok) {
+                    alert('Submission Error: Please try again');
+                } else {
+                    alert('New customer added!');
+                }
+            })
             .then(() => {
                 setName('');
                 setAddress('');
                 setPhone('');
             })
-            .catch(e => console.log('Customer fetch error: ', e))
-        //add some success alert here
+            .catch(e => console.error('Customer fetch error: ', e))
     }
 
     const handleChangeName = (event) => {

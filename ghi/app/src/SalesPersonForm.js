@@ -11,7 +11,7 @@ const SalesPersonForm = () => {
             "name": name,
             "employee_number": employee_number,
         };
-        // console.log(newSalesperson);
+
         const salespeopleUrl = 'http://localhost:8090/api/salespeople/';
         const fetchConfig = {
             method: "post",
@@ -21,13 +21,18 @@ const SalesPersonForm = () => {
             },
         }
         fetch(salespeopleUrl, fetchConfig)
-            .then(response => response.json)
+            .then((response) => {
+                if (!response.ok) {
+                    alert('Submission Error: Employee Number must be unique');
+                } else {
+                    alert('New sales person added!');
+                }
+            })
             .then(() => {
                 setName('');
                 setEmployeeNumber('');
             })
             .catch(e => console.error('Salespeople fetch error: ', e))
-        //add some success alert here
     }
 
     const handleChangeName = (event) => {

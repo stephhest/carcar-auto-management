@@ -24,6 +24,9 @@ def poll():
                         "color": automobile["color"],
                         "year": automobile["year"],
                         "vin": automobile["vin"],
+                        "picture_url": automobile["picture_url"],
+                        "model_name": automobile["model_name"],
+                        "manufacturer_name": automobile["manufacturer_name"]
                     }
                 )
         except Exception as e:

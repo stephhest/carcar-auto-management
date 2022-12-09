@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+import './index.css';
 
-const SalesHistoryList = () => {
+const SalesPersonHistory = () => {
 
     const [sales_person, setSalesPerson] = useState('');
     const [salespeople, setSalespeople] = useState([]);
@@ -19,21 +21,20 @@ const SalesHistoryList = () => {
         const value = event.target.value;
         setSalesPerson(value);
 
-        const filterSalesUrl = `http://localhost:8090/api/salespeople/${value}/sales`
+        const filterSalesUrl = `http://localhost:8090/api/sales/salespeople/${value}`
 
         fetch(filterSalesUrl)
             .then(response => response.json())
             .then(data => setSales(data.sales))
-            .catch(e => console.log('Filtered sales fetch error: ', e))
+            .catch(e => console.error('Filtered sales fetch error: ', e))
     }
 
     return (
         <>
         < br/>
-        <h1>Sales Person History</h1>
         <form id="sales-person-history">
             <div className="mb-3">
-                <select onChange={handleChangeSalesPerson} value={sales_person} required name="sales_person" id="sales_person" className="form-select">
+                <select onChange={handleChangeSalesPerson} value={sales_person} name="sales_person" id="sales_person" className="form-select">
                 <option value="">Select a Sales Person</option>
                 {salespeople.map(sales_person => {
                     return (
@@ -43,7 +44,7 @@ const SalesHistoryList = () => {
                 </select>
             </div>
         </form>
-        < br/>
+        <h1>Sales Person History</h1>
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -68,8 +69,11 @@ const SalesHistoryList = () => {
                 })}
             </tbody>
         </table>
+        <Link to="/salespeople/new">
+                <button className="btn btn-success">Add Sales Person</button>
+            </Link>
         </>
     )
 }
 
-export default SalesHistoryList;
+export default SalesPersonHistory;
