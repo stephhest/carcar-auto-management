@@ -106,15 +106,17 @@ CarCar Design")
 
 
 # Sample JSON Body Data for POST
-<details>
-<summary>Inventory (click to expand)</summary>
+
 Create Manufacturer
+
 ```
 {
   "name": "Chrysler"
 }
 ```
+
 Create Vehicle Model
+
 ```
 {
   "name": "Sebring",
@@ -122,7 +124,9 @@ Create Vehicle Model
   "manufacturer_id": 1
 }
 ```
+
 Create Automobile
+
 ```
 {
   "color": "red",
@@ -131,6 +135,7 @@ Create Automobile
   "model_id": 1
 }
 ```
-</details>
+
+
 - Service
 - Sales
