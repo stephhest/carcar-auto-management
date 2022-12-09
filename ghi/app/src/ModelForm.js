@@ -22,7 +22,7 @@ const ModelForm = () => {
             'picture_url': picture_url,
             'manufacturer_id': manufacturer_id
         }
-        // console.log(newModel);
+
         const modelUrl = 'http://localhost:8100/api/models/';
         const fetchConfig = {
             method: "post",
@@ -38,8 +38,7 @@ const ModelForm = () => {
                 setPictureUrl('');
                 setManufacturer('');
             })
-            .catch(e => console.log('Model fetch error: ', e))
-        //add some success alert here
+            .catch(e => console.error('Model fetch error: ', e))
     }
 
     const handleChangeName = (event) => {

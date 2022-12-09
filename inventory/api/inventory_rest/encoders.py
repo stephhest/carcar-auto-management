@@ -36,3 +36,9 @@ class AutomobileEncoder(ModelEncoder):
     encoders = {
         "model": VehicleModelEncoder(),
     }
+    def get_extra_data(self, o):
+        return {
+            "model_name": o.model.name,
+            "picture_url": o.model.picture_url,
+            "manufacturer_name": o.model.manufacturer.name,
+        }

@@ -10,7 +10,7 @@ const ModelList = () => {
         fetch(modelURL)
             .then(response => response.json())
             .then(data => {setModels(data.models);})
-            .catch(e => console.log('Models fetch error: ', e))
+            .catch(e => console.error('Models fetch error: ', e))
     }, [])
 
     return (

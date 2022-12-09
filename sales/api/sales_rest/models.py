@@ -2,12 +2,15 @@ from django.db import models
 from django.urls import reverse
 
 
-# AutomobileVO
 class AutomobileVO(models.Model):
     import_href = models.CharField(max_length=200, unique=True)
     color = models.CharField(max_length=50)
     year = models.PositiveSmallIntegerField()
     vin = models.CharField(max_length=17, unique=True)
+
+    picture_url = models.URLField(null=True)
+    manufacturer_name = models.CharField(max_length=100, null=True)
+    model_name = models.CharField(max_length=100, null=True)
 
     sold = models.BooleanField(default=False)
 
@@ -18,7 +21,6 @@ class AutomobileVO(models.Model):
         return self.vin
 
 
-# SalesPerson
 class SalesPerson(models.Model):
     name = models.CharField(max_length=100)
     employee_number = models.PositiveIntegerField(unique=True, null=True)
@@ -30,7 +32,6 @@ class SalesPerson(models.Model):
         return self.name
 
 
-# Customer
 class Customer(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
@@ -43,7 +44,6 @@ class Customer(models.Model):
         return self.name
 
 
-# Sale
 class Sale(models.Model):
     sale_price = models.PositiveIntegerField()
 

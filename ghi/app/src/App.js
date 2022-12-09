@@ -10,6 +10,11 @@ import Nav from './Nav';
 import ServiceAppointmentForm from './ServiceAppointmentForm';
 import ServiceAppointmentList from './ServiceAppointmentList';
 import TechnicianForm from './TechnicianForm';
+import SalesPersonForm from './SalesPersonForm';
+import CustomerForm from './CustomerForm';
+import SaleRecordForm from './SaleRecordForm';
+import SalesList from './SalesList';
+import SalesHistoryList from './SalesPersonHistory';
 import ServiceHistoryList from './ServiceHistory';
 
 function App() {
@@ -35,8 +40,21 @@ function App() {
             <Route index element={<AutosList />} />
             <Route path="new" element={<AutoForm />} />
           </Route>
+          <Route path="service">
+            <Route index element={<ServiceAppointmentList />} />
+            <Route path="new" element={<ServiceAppointmentForm />} />
+          </Route>
+          <Route path="sales">
+            <Route index element={<SalesList />} />
+            <Route path="new" element={<SaleRecordForm />} />
+          </Route>
+          <Route path="salespeople">
+            <Route index element={<SalesHistoryList />} />
+            <Route path="new" element={<SalesPersonForm />} />
+          </Route>
           <Route path="/technicians/new" element={<TechnicianForm />} />
-          <Route path="/service/vin" element={<ServiceHistoryList />} />
+          <Route path="/customers/new" element={<CustomerForm />} />
+           <Route path="/service/vin" element={<ServiceHistoryList />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from common.json import ModelEncoder
 from django.http import JsonResponse
 import json
+from django.db import IntegrityError
 from django.views.decorators.http import require_http_methods
 
 from .models import AutomobileVO, SalesPerson, Customer, Sale
@@ -16,7 +17,10 @@ class AutomobileVOEncoder(ModelEncoder):
         "vin",
         "color",
         "year",
-        "sold"
+        "sold",
+        "manufacturer_name",
+        "model_name",
+        "picture_url"
     ]
 
 
@@ -44,35 +48,37 @@ class SaleEncoder(ModelEncoder):
     properties = [
         "id",
         "sale_price",
-        "sales_person",
-        # "automobile",
-        # "customer"
     ]
-    encoders = {
-        "sales_person": SalesPersonEncoder(),
-        # "automobile": AutomobileVOEncoder(),
-        # "customer": CustomerEncoder(),
-    }
-
     def get_extra_data(self, o):
         return {
             "automobile": o.automobile.vin,
             "customer": o.customer.name,
+            "sales_person": o.sales_person.name,
+            "employee_number": o.sales_person.employee_number
         }
 
 
 
 ### VIEWS ###
 
-# LIST AUTO VOS
-# /api/automobiles/
+
+# LIST  AUTO VOS
+# /api/automobiles/<str:status>/
 @require_http_methods(["GET"])
-def api_list_auto_vos(request):
-    auto_vos = AutomobileVO.objects.all()
+def api_list_auto_vos(request, status=None):
+    if status is not None:
+        if status == "sold":
+            sold = True
+        elif status == "available":
+            sold = False
+        auto_vos = AutomobileVO.objects.filter(sold=sold)
+    else:
+        auto_vos = AutomobileVO.objects.all()
     return JsonResponse(
         {"autos": auto_vos},
         encoder=AutomobileVOEncoder
     )
+
 
 # LIST AND CREATE SALESPEOPLE
 # /api/salespeople/
@@ -86,13 +92,17 @@ def api_list_salespeople(request):
         )
     else: #POST
         content = json.loads(request.body)
-        # employee_number = content["sales_person"]
-        sales_person = SalesPerson.objects.create(**content)
-        return JsonResponse(
-            {"sales_person": sales_person},
-            encoder=SalesPersonEncoder,
-        )
-        # Handle integrity error / exception handling for when an employee id already exists
+        try:
+            sales_person = SalesPerson.objects.create(**content)
+            return JsonResponse(
+                {"sales_person": sales_person},
+                encoder=SalesPersonEncoder,
+            )
+        except IntegrityError:
+            return JsonResponse(
+                {"message": "Employee number already used.  Please try again."},
+                status=400
+            )
 
 
 # LIST AND CREATE CUSTOMERS
@@ -108,7 +118,6 @@ def api_list_customers(request):
     else: #POST
         content = json.loads(request.body)
         customer = Customer.objects.create(**content)
-        print("customer", customer)
         return JsonResponse(
             {"customer": customer},
             encoder=CustomerEncoder
@@ -117,15 +126,16 @@ def api_list_customers(request):
 
 # LIST AND CREATE SALES
 # /api/sales
-# /api/salespeople/<int:employee_number>/sales
+# /api/sales/salespeople/
+# /api/sales/salespeople/<int:employee_number>
 @require_http_methods(["GET", "POST"])
 def api_list_sales(request, employee_number=None):
     if request.method == "GET":
         if employee_number is not None:
-            sales = Sale.objects.filter(employee_number=employee_number)
+            sales_person_id = SalesPerson.objects.values_list('id', flat=True).get(employee_number=employee_number)
+            sales = Sale.objects.filter(sales_person_id=sales_person_id)
         else:
             sales = Sale.objects.all()
-            print(sales)
         return JsonResponse(
             {"sales": sales},
             encoder=SaleEncoder,
@@ -144,7 +154,6 @@ def api_list_sales(request, employee_number=None):
                     status=400
                 )
             else:
-                AutomobileVO.objects.filter(vin=automobile_vin).update(sold=True)
                 content["automobile"] = automobile
         except AutomobileVO.DoesNotExist:
             return JsonResponse(
@@ -168,6 +177,7 @@ def api_list_sales(request, employee_number=None):
                 status=400
             )
         sale = Sale.objects.create(**content)
+        AutomobileVO.objects.filter(vin=automobile_vin).update(sold=True)
         return JsonResponse(
             sale,
             encoder=SaleEncoder,
