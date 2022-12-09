@@ -137,16 +137,14 @@ def api_service_history(request, vin):
     if request.method == "GET":
 
         try:
-            service = Appointment.objects.filter(automobile__vin=vin)
+            service = Appointment.objects.filter(vin=vin)
             if len(service) == 0:
                 raise ValueError('There are no past services associated with this VIN number')
             return JsonResponse(
-                service,
+                {"appointments":service},
                 encoder=AppointmentListEncoder,
-                safe=False
             )
         except Appointment.DoesNotExist:
-            print("Hello Vin")
             return JsonResponse(
                 {"message": "Invalid Appointment"},
                 status=400,
