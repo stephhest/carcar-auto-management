@@ -17,16 +17,15 @@ def get_auto():
     content = json.loads(response.content)
     for automobile in content["autos"]:
         AutomobileVO.objects.update_or_create(
-            vin=automobile["vin"],
-            defaults={"year": automobile["year"],
-            "color": automobile["color"]},
-
+            import_href=automobile["href"],
+            defaults={"vin": automobile["vin"]},
         )
 def poll():
     while True:
         print('Service poller polling for data')
         try:
             get_auto()
+            print("this is working")
         except Exception as e:
             print(e, file=sys.stderr)
         time.sleep(60)

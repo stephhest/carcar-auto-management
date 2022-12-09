@@ -1,49 +1,82 @@
-// import { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import './index.css';
+import React from 'react';
 
-// const ManufacturerList = () => {
-//     const [manufacturers, setManufacturers] = useState([]);
+class ServiceHistory extends React.Component {
+    constructor(props){
+        super(props);
+        this.state ={
+            vin: "",
+            appointments: [],
+        };
+        this.handleChangeVin = this.handleChangeVin.bind(this);
+        this.onSearch = this.onSearch.bind(this);
+    }
 
-//     useEffect(() => {
-//         const manufacturersURL = 'http://localhost:8100/api/manufacturers/';
-//         fetch(manufacturersURL)
-//         .then(response => response.json())
-//         .then(data => {setManufacturers(data.manufacturers);})
-//         .catch(e => console.log('Manufacturer fetch error: ', e));
-//     }, [])
+    async onSearch(event) {
+        event.preventDefault();
+        const data = { ...this.state };
 
-//     return (
-//         <>
-//             < br/>
-//             <h1>Manufacturer List</h1>
-//             <table className="table table-striped">
-//                 <thead>
-//                     <tr>
-//                         <th>Manufacturer</th>
-//                         {/* <th>Actions</th> */}
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {manufacturers.map(manufacturer => {
+        const vinUrl = `http://localhost:8080/api/appointments/vin/${data.vin}`;
+        const response = await fetch(vinUrl);
+        console.log(response)
+        if (response.ok) {
+            const vins = await response.json();
+            this.setState({appointments:vins.appointments})
+            const cleared = {
+                vin: '',
+            };
+            this.setState(cleared);
+        }
+    }
 
-//                         return (
-//                             <tr key={manufacturer.href}>
-//                                 <td>{manufacturer.name}</td>
-//                                 {/* <td>
-//                                     <button onClick={() => onDeleteAutoClick(auto)}>X</button>
-//                                     <span>{auto.style}</span>
-//                                 </td> */}
-//                             </tr>
-//                         );
-//                     })}
-//                 </tbody>
-//             </table>
-//             <Link to="/manufactures/new">
-//                 <button className="btn btn-success">Add Manufacturer</button>
-//             </Link>
-//         </>
-//     );
-// };
+    handleChangeVin(event) {
+        const value = event.target.value;
+        this.setState({ vin: value });
+    }
 
-// export default ManufacturerList;
+    render() {
+        return (
+            <>
+            <p></p>
+            <div>
+            <div className= "input-group">
+            <form onSubmit= {this.onSearch} id= "search-bar" className='search-bar'>
+                <input onChange={this.handleChangeVin} value={this.state.vin} required placeholder="Enter VIN"
+                type="search" id="search" name="vin" className="form-control rounded" /> <button> Search</button>
+            </form>
+            </div>
+            </div>
+            <p></p>
+            <div className= "service list">
+                <h2> Service History</h2>
+                <table className="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>VIN</th>
+                        <th>Customer Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Technician</th>
+                        <th>Reason</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {this.state.appointments.map((appointment) => {
+                                return (
+                                    <tr key={appointment.id}>
+                                        <td>{appointment.vin}</td>
+                                        <td>{appointment.owner_name}</td>
+                                        <td>{appointment.date}</td>
+                                        <td>{appointment.time}</td>
+                                        <td>{appointment.technician.name}</td>
+                                        <td>{appointment.reason}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                </table>
+            </div>
+            </>
+        );
+    }
+}
+export default ServiceHistory;

@@ -27,7 +27,6 @@ class ServiceAppointmentForm extends React.Component {
       data.owner_name = data.ownerName;
       delete data.ownerName;
       delete data.technicians;
-      console.log(data)
 
       const serviceUrl = 'http://localhost:8080/api/appointments/';
       const fetchConfig = {
@@ -40,7 +39,6 @@ class ServiceAppointmentForm extends React.Component {
       const response = await fetch(serviceUrl, fetchConfig);
       if (response.ok) {
         const newServiceAppointment = await response.json();
-        console.log(newServiceAppointment);
 
         const cleared = {
           vin: '',
@@ -81,8 +79,6 @@ class ServiceAppointmentForm extends React.Component {
 
   handleTechnicianChange(event) {
       const value = event.target.value;
-	  console.log(event)
-	  console.log(event.target.value)
       this.setState({technician: value });
     }
 
@@ -90,10 +86,8 @@ class ServiceAppointmentForm extends React.Component {
       const url = 'http://localhost:8080/api/technicians/';
 
       const response = await fetch(url);
-		console.log(response)
       if (response.ok) {
         const data = await response.json();
-		console.log(data)
         this.setState({technicians: data.technician});
       }
     }
@@ -107,11 +101,11 @@ class ServiceAppointmentForm extends React.Component {
 				  <form onSubmit={this.handleSubmit} id="create-service-appointment-form" >
 					<div className="form-floating mb-3">
 					  <input value={this.state.vin} onChange={this.handleVinChange} placeholder="vin" required type="text" name="vin" id="vin" className="form-control" />
-					  <label htmlFor="vin">Vin</label>
+					  <label htmlFor="vin">VIN #</label>
 					</div>
 					<div className="form-floating mb-3">
 					  <input value={this.state.ownerName} onChange={this.handleOwnerNameChange} placeholder="ownerName" required type="text" name="ownerName" id="ownerName" className="form-control" />
-					  <label htmlFor="ownerName">OwnerName</label>
+					  <label htmlFor="ownerName">Customer Name</label>
 					</div>
 					<div className="form-floating mb-3">
 					  <input value={this.state.date} onChange={this.handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
@@ -123,7 +117,7 @@ class ServiceAppointmentForm extends React.Component {
 					</div>
 					<div className="form-floating mb-3">
 					  <textarea value={this.state.reason} onChange={this.handleReasonChange} placeholder="reason" name="reason" id="reason" className="form-control" rows="3"/>
-					  <label htmlFor="reason" className="form-label">reason</label>
+					  <label htmlFor="reason" className="form-label">Reason</label>
 					</div>
 					<div className="mb-3">
 					  <select value={this.state.technician} onChange={this.handleTechnicianChange} required name="technician" id="technician" className="form-select">

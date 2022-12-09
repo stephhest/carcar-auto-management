@@ -17,7 +17,6 @@ const TechnicianForm = () => {
         "name": name,
         "employee_number": employeeNumber,
     };
-    console.log(newTechnician)
     const technicianUrl = 'http://localhost:8080/api/technicians/';
     const fetchConfig = {
         method: "post",
@@ -33,8 +32,7 @@ const TechnicianForm = () => {
             setEmployeeNumber('');
         })
         .catch(e => console.log('Technician fetch error: ', e))
-        console.log(technicianUrl)
-        console.log(fetchConfig)
+
     }
 
     const handleChangeName = (event) => {
