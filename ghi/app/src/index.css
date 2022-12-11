@@ -24,3 +24,21 @@ h1 {
   float: right;
   margin-left: 2rem;
 }
+
+#nav-button {
+  font-weight: 500;
+  font-size: large;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+ul {
+  padding-left: 1rem;
+  list-style-type: none;
+}
+
+li {
+  padding-left: 8px;
+}
