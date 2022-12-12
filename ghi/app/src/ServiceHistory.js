@@ -7,20 +7,17 @@ const ServiceHistory = () => {
     const [apptVins, setApptVins] = useState([]);
     const [appointments, setAppointments] = useState([]);
 
-    function removeDuplicates(arr) {
-        return arr.filter((item, index) =>
-            arr.indexOf(item === index));
-    }
-
     useEffect(() => {
         const apptsUrl = 'http://localhost:8080/api/appointments/'
         fetch(apptsUrl)
             .then(response => response.json())
-            .then(data => (data.appointments))
-            .then(data => (removeDuplicates(data)))
-            .then(data => setApptVins(data))
+            .then(data => setApptVins(data.appointments))
             .catch(e => console.error('Appointment fetch error: ', e))
     }, [])
+
+    const vinOptions = new Map([
+        ...apptVins.map(appointment => [appointment.vin])
+    ]);
 
     const handleVinChange = (event) => {
         const value = event.target.value;
@@ -31,22 +28,20 @@ const ServiceHistory = () => {
         fetch(filterApptUrl)
             .then(response => response.json())
             .then(data => setAppointments(data.appointments))
-            .catch(e => console.error('Filterd appointments fetch error: ', e))
+            .catch(e => console.error('Filtered appointments fetch error: ', e))
     }
 
     return (
         <>
         < br/>
         <div id="heading">
-            <form id="sales-person-history">
+            <form id="service-history">
                 <div className="mb-3">
-                    <select onChange={handleVinChange} value={vin} name="vin" id="vin" className="form-select">
-                    <option value="">Select an Automobile</option>
-                    {apptVins.map(apptVin => {
-                        return (
-                        <option key={apptVin.vin} value={apptVin.Vin}>{apptVin.vin}</option>
-                        )
-                    })}
+                    <select className="form_select" onChange={handleVinChange} value={vin} name="vin" id="vin">
+                    <option value=''>--Select Automobile VIN--</option>
+                    {[...vinOptions].map(([vin]) => (
+                    <option key={vin} value={vin}>{vin}</option>
+                    ))}
                     </select>
                 </div>
             </form>
@@ -66,13 +61,13 @@ const ServiceHistory = () => {
             <tbody>
                 {appointments.map(appointment => {
                     return (
-                        <tr key={appointment.href}>
+                        <tr key={appointment.id}>
                             <td>{appointment.vin}</td>
                             <td>{appointment.owner_name}</td>
                             <td>{appointment.date}</td>
                             <td>{appointment.time}</td>
                             <td>{appointment.reason}</td>
-                            <td>{appointment.technician}</td>
+                            <td>{appointment.technician.name}</td>
                         </tr>
                     );
                 })}

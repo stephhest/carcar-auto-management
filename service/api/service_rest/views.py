@@ -48,6 +48,14 @@ class AppointmentEncoder(ModelEncoder):
     }
 
 
+class AppointmentVinEncoder(ModelEncoder):
+    model = Appointment
+    properties = [
+        "vin",
+    ]
+
+
+
 ### VIEWS ###
 
 # LIST AUTO VOS
@@ -60,6 +68,7 @@ def api_list_auto_vos(request):
             encoder=AutomobileVOEncoder,
             safe=False
         )
+
 
 # LIST AND CREATE TECHNICIANS
 @require_http_methods(["GET", "POST"])
@@ -82,10 +91,10 @@ def api_list_technicians(request):
 
 # LIST AND CREATE APPOINTMENTS
 @require_http_methods(["GET", "POST"])
-def api_list_appointments(request, appt_vin=None):
+def api_list_appointments(request, vin=None):
     if request.method == "GET":
-        if appt_vin is not None:
-            appointments = Appointment.objects.filter(vin=appt_vin)
+        if vin is not None:
+            appointments = Appointment.objects.filter(vin=vin)
         else:
             appointments = Appointment.objects.all()
         return JsonResponse(
@@ -114,7 +123,6 @@ def api_list_appointments(request, appt_vin=None):
             encoder=AppointmentEncoder,
             safe=False,
         )
-
 
 # SHOW / UPDATE / DELETE APPOINTMENT
 @require_http_methods(["GET", "PUT", "DELETE"])
