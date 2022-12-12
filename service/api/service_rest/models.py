@@ -3,35 +3,48 @@ from django.urls import reverse
 
 
 class AutomobileVO(models.Model):
+    import_href = models.CharField(max_length=200, unique=True)
+    color = models.CharField(max_length=50)
+    year = models.PositiveSmallIntegerField()
     vin = models.CharField(max_length=17, unique=True)
-    import_href = models.CharField(max_length=200, null=True)
 
+    picture_url = models.URLField(null=True)
+    manufacturer_name = models.CharField(max_length=100, null=True)
+    model_name = models.CharField(max_length=100, null=True)
 
+    def get_api_url(self):
+        return reverse("api_show_auto_vo", kwargs={"vin": self.vin})
 
-
+    def __str__(self):
+        return self.vin
 
 
 class Technician(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     employee_number = models.PositiveIntegerField(unique=True, null=True)
+
     def get_api_url(self):
-        return reverse("show_tech", kwargs={"pk": self.id})
+        return reverse("api_show_technician", kwargs={"employee_number": self.employee_number})
+
     def __str__(self):
         return self.name
 
 
 class Appointment(models.Model):
-    vin = models.CharField(max_length=17, null=True, unique=False)
-    owner_name = models.CharField(max_length=50)
-    date = models.DateField(null=True)
-    time = models.TimeField(null=True)
+    vin = models.CharField(max_length=17, unique=False)
+    owner_name = models.CharField(max_length=100)
+    date = models.DateField()
+    time = models.TimeField()
     reason = models.TextField(max_length=200)
-    purchased = models.BooleanField(null=True)
-    complete = models.BooleanField(null=True)
+
+    vip = models.BooleanField(default=False)
+    complete = models.BooleanField(default=False)
+
     technician = models.ForeignKey(
         Technician,
-        related_name="technician",
+        related_name="appointment",
         on_delete=models.CASCADE
     )
+
     def get_api_url(self):
-        return reverse("show_appointment", kwargs={"pk": self.id})
+        return reverse("api_show_appointment", kwargs={"pk": self.id})

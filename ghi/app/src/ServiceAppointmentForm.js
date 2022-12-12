@@ -1,143 +1,175 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-class ServiceAppointmentForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      vin: '',
-      ownerName: '',
-      date: '',
-      time: '',
-      reason: '',
-      technician: '',
-      technicians: [],
-    };
-    this.handleVinChange = this.handleVinChange.bind(this);
-    this.handleOwnerNameChange = this.handleOwnerNameChange.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleTimeChange = this.handleTimeChange.bind(this);
-    this.handleReasonChange = this.handleReasonChange.bind(this);
-    this.handleTechnicianChange = this.handleTechnicianChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+const ServiceAppointmentForm = () => {
 
-    async handleSubmit(event) {
-      event.preventDefault();
-      const data = {...this.state};
-      data.owner_name = data.ownerName;
-      delete data.ownerName;
-      delete data.technicians;
+  const [vinInput, setVinInput] = useState('');
+  const [vinSelect, setVinSelect] = useState('');
+  const [autoVOs, setAutoVOs] = useState([]);
+  const [ownerName, setOwnerName] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [reason, setReason] = useState('');
+  const [technician, setTechnician] = useState('');
+  const [technicians, setTechnicians] = useState([]);
 
-      const serviceUrl = 'http://localhost:8080/api/appointments/';
-      const fetchConfig = {
-        method: "post",
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-      const response = await fetch(serviceUrl, fetchConfig);
-      if (response.ok) {
-        const newServiceAppointment = await response.json();
+  useEffect(() =>  {
+    const techUrl = 'http://localhost:8080/api/technicians/'
+    fetch(techUrl)
+      .then(response => response.json())
+      .then(data => setTechnicians(data.technicians))
+      .catch(e => console.error('Fetch techinicians error: ', e))
+  }, [])
 
-        const cleared = {
-          vin: '',
-          ownerName: '',
-          date: '',
-          time: '',
-          reason: '',
-          technician: '',
-        };
-        this.setState(cleared);
-      }
+  useEffect(() => {
+    const autoUrl = 'http://localhost:8080/api/automobiles/'
+    fetch(autoUrl)
+        .then(response => response.json())
+        .then(data => setAutoVOs(data.autos))
+        .catch(e => console.error('Fetch auto VOs error: ', e))
+  }, [])
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let vin = '';
+    let vip = '';
+    if (vinInput !== '') {
+      vin = vinInput;
+      vip = false;
+    } else {
+      vin = vinSelect;
+      vip = true;
     }
 
-  handleVinChange(event) {
-    const value = event.target.value;
-    this.setState({ vin: value })
-  }
-
-  handleOwnerNameChange(event) {
-    const value = event.target.value;
-    this.setState({ ownerName: value })
-  }
-
-  handleDateChange(event) {
-    const value = event.target.value;
-    this.setState({ date: value })
-  }
-
-  handleTimeChange(event) {
-    const value = event.target.value;
-    this.setState({ time: value });
-  }
-
-  handleReasonChange(event) {
-    const value = event.target.value;
-    this.setState({ reason: value });
-   }
-
-  handleTechnicianChange(event) {
-      const value = event.target.value;
-      this.setState({technician: value });
+    const newAppt = {
+      'vin': vin,
+      'owner_name': ownerName,
+      'date': date,
+      'time': time,
+      'reason': reason,
+      'vip': vip,
+      'complete': false,
+      'technician': technician
     }
 
-  async componentDidMount() {
-      const url = 'http://localhost:8080/api/technicians/';
-
-      const response = await fetch(url);
-      if (response.ok) {
-        const data = await response.json();
-        this.setState({technicians: data.technician});
-      }
+    const apptUrl = 'http://localhost:8080/api/appointments/'
+    const fetchConfig = {
+      method: 'post',
+      body: JSON.stringify(newAppt),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }
+    fetch(apptUrl, fetchConfig)
+      .then((response) => {
+        if (!response.ok) {
+          alert('Submission Error: Please try again');
+        }
+      })
+      .then(() => {
+        setVinInput('');
+        setVinSelect('');
+        setOwnerName('');
+        setDate('');
+        setTime('');
+        setReason('');
+        setTechnician('');
+      })
+      .catch(e => console.error('Appointment fetch error: ', e))
+  }
 
-    render() {
-		return (
-			<div className="row">
-			  <div className="offset-3 col-6">
-				<div className="shadow p-4 mt-4">
-				  <h1>Create a new service appointment</h1>
-				  <form onSubmit={this.handleSubmit} id="create-service-appointment-form" >
-					<div className="form-floating mb-3">
-					  <input value={this.state.vin} onChange={this.handleVinChange} placeholder="vin" required type="text" name="vin" id="vin" className="form-control" />
-					  <label htmlFor="vin">VIN #</label>
-					</div>
-					<div className="form-floating mb-3">
-					  <input value={this.state.ownerName} onChange={this.handleOwnerNameChange} placeholder="ownerName" required type="text" name="ownerName" id="ownerName" className="form-control" />
-					  <label htmlFor="ownerName">Customer Name</label>
-					</div>
-					<div className="form-floating mb-3">
-					  <input value={this.state.date} onChange={this.handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
-					  <label htmlFor="date">Date</label>
-					</div>
-					<div className="form-floating mb-3">
-					  <input value={this.state.time} onChange={this.handleTimeChange} placeholder="time" required type="time" name="time" id="time" className="form-control" />
-					  <label htmlFor="time">Time</label>
-					</div>
-					<div className="form-floating mb-3">
-					  <textarea value={this.state.reason} onChange={this.handleReasonChange} placeholder="reason" name="reason" id="reason" className="form-control" rows="3"/>
-					  <label htmlFor="reason" className="form-label">Reason</label>
-					</div>
-					<div className="mb-3">
-					  <select value={this.state.technician} onChange={this.handleTechnicianChange} required name="technician" id="technician" className="form-select">
-						<option value="">Choose a technician</option>
-						{this.state.technicians.map(technician => {
-						  return (
-							<option key={technician.id} value={technician.id}>
-							  {technician.name}
-							</option>
-						  );
-						})}
-					  </select>
-					</div>
-					<button className="btn btn-primary">Create</button>
-				  </form>
-				</div>
-			</div>
-		</div>
-        )
-	}
+  const handleVinInputChange = (event) => {
+    const value = event.target.value;
+    setVinInput(value);
+  }
+
+  const handleVinSelectChange = (event) => {
+    const value = event.target.value;
+    setVinSelect(value);
+  }
+
+
+  const handleOwnerNameChange = (event) => {
+    const value = event.target.value;
+    setOwnerName(value);
+  }
+
+  const handleDateChange = (event) => {
+    const value = event.target.value;
+    setDate(value);
+  }
+
+  const handleTimeChange = (event) => {
+    const value = event.target.value;
+    setTime(value);
+  }
+
+  const handleReasonChange = (event) => {
+    const value = event.target.value;
+    setReason(value);
+  }
+
+  const handleTechnicianChange = (event) => {
+    const value = event.target.value;
+    setTechnician(value);
+  }
+
+  return (
+    <div className="my-5 container">
+      <div className="offset-3 col-6">
+        <div className="shadow p-4 mt-4">
+          <h1>Create a new service appointment</h1>
+          <br/>
+          <form onSubmit={handleSubmit} id="create-service-appointment-form" >
+          <div className="form-floating mb-3">
+            <input value={vinInput} onChange={handleVinInputChange} placeholder=""  type="text" name="vinInput" id="vinInput" className="form-control" />
+            <label htmlFor="vin">Enter VIN #</label>
+          </div>
+          <div className="mb-3">
+            <select onChange={handleVinSelectChange} value={vinSelect}  name="vinSelect" id="vinSelect" className="form-select">
+              <option value="">OR Select Automobile from Inventory</option>
+              {autoVOs.map(autoVO => {
+                return (
+                  <option key={autoVO.vin} value={autoVO.vin}>{autoVO.vin} - {autoVO.year} {autoVO.manufacturer_name} {autoVO.model_name}</option>
+                )
+              })}
+            </select>
+          </div>
+          <div className="form-floating mb-3">
+            <input value={ownerName} onChange={handleOwnerNameChange} placeholder="" required type="text" name="ownerName" id="ownerName" className="form-control" />
+            <label htmlFor="ownerName">Enter Owner Name</label>
+          </div>
+          <div className="form-floating mb-3">
+            <input value={date} onChange={handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
+            <label htmlFor="date">Choose Date</label>
+          </div>
+          <div className="form-floating mb-3">
+            <input value={time} onChange={handleTimeChange} placeholder="time" required type="time" name="time" id="time" className="form-control" />
+            <label htmlFor="time">Choose Time</label>
+          </div>
+          <div className="form-floating mb-3">
+            <textarea value={reason} onChange={handleReasonChange} placeholder="" name="reason" required id="reason" className="form-control" rows="3"/>
+            <label htmlFor="reason" className="form-label">Description / Reason for Appointment</label>
+          </div>
+          <div className="mb-3">
+            <select value={technician} onChange={handleTechnicianChange} required name="technician" id="technician" className="form-select">
+            <option value="">Select Technician</option>
+            {technicians.map(technician => {
+              return (
+              <option key={technician.id} value={technician.id}>
+                {technician.name}
+              </option>
+              );
+            })}
+            </select>
+          </div>
+          <button className="btn btn-primary">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+
 }
 
 export default ServiceAppointmentForm;
