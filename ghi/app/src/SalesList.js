@@ -23,7 +23,7 @@ const SalesList = () => {
         <div id="heading">
             <h1>All Sales</h1>
             <Link to="/sales/new">
-                    <button id="addbutton" className="btn btn-success">Create Sale Record</button>
+                    <button id="addbutton" className="btn btn-success">New Sale Record</button>
             </Link>
         </div>
         <table className="table table-striped">

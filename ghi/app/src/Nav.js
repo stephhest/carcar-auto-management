@@ -43,7 +43,7 @@ function Nav() {
                   <Link className="nav-link" to="appointments/new">New Appointment</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/appointments">All Appointments</Link>
+                  <Link className="nav-link" to="/appointments">Current Appointments</Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/service/vin">Service History</Link>

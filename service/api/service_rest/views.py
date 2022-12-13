@@ -91,10 +91,16 @@ def api_list_technicians(request):
 
 # LIST AND CREATE APPOINTMENTS
 @require_http_methods(["GET", "POST"])
-def api_list_appointments(request, vin=None):
+def api_list_appointments(request, vin=None, status=None):
     if request.method == "GET":
         if vin is not None:
             appointments = Appointment.objects.filter(vin=vin)
+        elif status is not None:
+            if status == "scheduled":
+                complete = False
+            elif status == "complete":
+                complete = True
+            appointments = Appointment.objects.filter(complete=complete)
         else:
             appointments = Appointment.objects.all()
         return JsonResponse(

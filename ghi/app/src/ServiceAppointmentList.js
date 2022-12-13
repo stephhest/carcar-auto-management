@@ -17,22 +17,42 @@ class ServiceAppointmentList extends React.Component {
     }
 
     async handleDelete(id){
-        const serviceUrl = `http://localhost:8080/api/appointments/${id}/`;
+        const appointmentUrl = `http://localhost:8080/api/appointments/${id}/`;
+
         const fetchConfig = {
           method: "delete",
           headers: {
             'Content-Type': 'application/json',
           },
         };
-        const response = await fetch(serviceUrl, fetchConfig);
-        if (response.ok) {
-          const deleteService = await response.json();
-          this.fetchAppointments();
+        const response = await fetch(appointmentUrl, fetchConfig);
+        if (!response.ok) {
+            alert('Error: Please try again');
+        } else {
+            this.fetchAppointments();
+        }
+    }
+
+    async handleComplete(id){
+        const appointmentUrl = `http://localhost:8080/api/appointments/${id}/`;
+        const body = {'complete': true,}
+        const fetchConfig = {
+            method: 'put',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type':'application/json',
+            },
+        };
+        const response = await fetch(appointmentUrl, fetchConfig)
+        if (!response.ok) {
+            alert('Error: Please try again');
+        } else {
+            this.fetchAppointments();
         }
     }
 
     async fetchAppointments() {
-        const response = await fetch('http://localhost:8080/api/appointments/')
+        const response = await fetch('http://localhost:8080/api/appointments/scheduled/')
         if (response.ok) {
             const data = await response.json()
             this.setState({appointments: data.appointments})
@@ -44,7 +64,7 @@ class ServiceAppointmentList extends React.Component {
             <>
             < br/>
             <div id="heading">
-                <h1>All Service Appointments</h1>
+                <h1>Current Appointments</h1>
                 <Link to="/sales/new">
                         <button id="addbutton" className="btn btn-success">New Service Appointment</button>
                 </Link>
@@ -81,8 +101,7 @@ class ServiceAppointmentList extends React.Component {
                                 <td>{appointment.technician.name}</td>
                                 <td>{appointment.reason}</td>
                                 <td><button onClick={() => this.handleDelete(appointment.id)} className="btn btn-danger">Cancel</button></td>
-                                {/* REVISE THIS - FINISHED TO HANDLE UPDATE */}
-                                <td><button onClick={() => this.handleDelete(appointment.id)} className="btn btn-success">Finished</button></td>
+                                <td><button onClick={() => this.handleComplete(appointment.id)} className="btn btn-success">Finished</button></td>
                                 <td>{vip}</td>
                             </tr>
                         );

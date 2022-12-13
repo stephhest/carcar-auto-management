@@ -7,9 +7,12 @@ urlpatterns = [
 
     path("technicians/", api_list_technicians, name="api_list_technicians"),
 
+    path("appointments/<int:pk>/", api_show_appointment, name="api_show_appointment"),
+
     path("appointments/", api_list_appointments, name="api_list_appointments"),
     path("appointments/automobiles/", api_list_appointments, name="api_list_appointments"),
-    path("appointments/automobiles/<str:vin>/", api_list_appointments, name="api_list_appointments"),
-
-    path("appointments/<int:pk>/", api_show_appointment, name="api_show_appointment"),
+    path("appointments/automobiles/<str:vin>/",
+    api_list_appointments, name="api_list_appointments"),
+    path("appointments/<str:status>/",
+    api_list_appointments, name="api_list_appointments"),
 ]

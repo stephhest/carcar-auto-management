@@ -56,10 +56,17 @@ const ServiceHistory = () => {
                     <th>Time</th>
                     <th>Reason</th>
                     <th>Technician</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 {appointments.map(appointment => {
+                    let status = ""
+                    if(appointment.complete === true){
+                        status = "Complete"
+                    } else {
+                        status = "Scheduled"
+                    }
                     return (
                         <tr key={appointment.id}>
                             <td>{appointment.vin}</td>
@@ -68,6 +75,7 @@ const ServiceHistory = () => {
                             <td>{appointment.time}</td>
                             <td>{appointment.reason}</td>
                             <td>{appointment.technician.name}</td>
+                            <td>{status}</td>
                         </tr>
                     );
                 })}

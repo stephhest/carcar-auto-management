@@ -118,7 +118,7 @@ const ServiceAppointmentForm = () => {
     <div className="my-5 container">
       <div className="offset-3 col-6">
         <div className="shadow p-4 mt-4">
-          <h1>Create a new service appointment</h1>
+          <h1>Create a New Service Appointment</h1>
           <br/>
           <form onSubmit={handleSubmit} id="create-service-appointment-form" >
           <div className="form-floating mb-3">
