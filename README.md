@@ -1,11 +1,7 @@
 # CarCar
 
-Team:
-* Stephanie Hestilow - Sales
-* Kayre Santos - Service
-
 ## Instructions to run project
-1. Fork and clone the project from: https://gitlab.com/kayresantos/project-beta
+1. Fork and clone the project from:
 2. Copy the clone with the HTTPS link
 3. Open up a command terminal and cd into your project directory
 In your command terminal type:
@@ -20,39 +16,11 @@ In your command terminal type:
 6. To see and engage with the app, open up google chrome go to http://localhost:3000
 
 ## Design
-![CarCar Design](/images/CarCarDiagram.png "
+![CarCar Design](/images/carcar_diagram.png "
 CarCar Design")
 
 ## Service microservice
-- The Services microservice includes:
-1. TechnicianForm
-    - create a form that allows a person to enter a technician's name and employee number
 
-2. ServiceAppointmentForm
-    - create a form that allows a service concierge to enter
-        -the VIN of the vehicle
-        -the name of the person to whom the vehicle belongs
-        -the date and time of the appointment
-        -the assigned technician
-        -a reason for the service appointment
-            For example: "oil change" or "routine maintenance"
-    -  When the form is submitted, the service appointment should be saved in the application
-    -  create a link in the navbar to get to the Enter a service appointment form.
-
-3. List of Appointments
-    - get the list of service appointments
-        -Vin
-        -Customer Name/ Owner Name
-        -date and time of the appointment
-        -the assigned technician's name
-        -the reason for the service
-        - Cancel button if pressed will delete the appointment from the list
-        - Finished button if pressed will delete the appointment from the list
-        - VIP status(If vehicle was purchased from inventory)
-
-4. ServiceHistoryForm
-    - A page that has an input that allows someone to type in a VIN number
-    - fetch all of the service appointments associated with a VIN number
 
 ## Sales microservice
 - Models
@@ -188,4 +156,3 @@ Create Sale Record
     "customer": 1
 }
 ```
-
