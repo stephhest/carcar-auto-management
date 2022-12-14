@@ -123,12 +123,19 @@ def api_list_appointments(request, vin=None, status=None):
                 {"message": "Invalid or missing technician id"},
                 status=400
             )
-        appointment = Appointment.objects.create(**content)
-        return JsonResponse(
-            appointment,
-            encoder=AppointmentEncoder,
-            safe=False,
-        )
+        try: # handle an existing appointment
+            Appointment.objects.get(technician=technician, date=content["date"], time=content["time"])
+            return JsonResponse(
+                {"message": "This time slot for the selected technician is not available"},
+                status=400
+            )
+        except Appointment.DoesNotExist:
+            appointment = Appointment.objects.create(**content)
+            return JsonResponse(
+                appointment,
+                encoder=AppointmentEncoder,
+                safe=False,
+            )
 
 # SHOW / UPDATE / DELETE APPOINTMENT
 @require_http_methods(["GET", "PUT", "DELETE"])

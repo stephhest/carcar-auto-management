@@ -48,3 +48,11 @@ class Appointment(models.Model):
 
     def get_api_url(self):
         return reverse("api_show_appointment", kwargs={"pk": self.id})
+
+
+# class TechnicianSchedule(models.Model):
+# Props:
+# on_days(dictionary),
+# time_slots(dictionary),
+# holidays(list of date objects),
+# PTO(list of date objects)

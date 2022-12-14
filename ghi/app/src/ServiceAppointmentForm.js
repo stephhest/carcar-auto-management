@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Calendar from 'react-calendar';
 
 const ServiceAppointmentForm = () => {
 
@@ -6,6 +7,7 @@ const ServiceAppointmentForm = () => {
   const [vinSelect, setVinSelect] = useState('');
   const [autoVOs, setAutoVOs] = useState([]);
   const [ownerName, setOwnerName] = useState('');
+  const [calDate, setCalDate] = useState(new Date());
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [reason, setReason] = useState('');
@@ -94,6 +96,7 @@ const ServiceAppointmentForm = () => {
     setOwnerName(value);
   }
 
+
   const handleDateChange = (event) => {
     const value = event.target.value;
     setDate(value);
@@ -139,18 +142,6 @@ const ServiceAppointmentForm = () => {
             <input value={ownerName} onChange={handleOwnerNameChange} placeholder="" required type="text" name="ownerName" id="ownerName" className="form-control" />
             <label htmlFor="ownerName">Enter Owner Name</label>
           </div>
-          <div className="form-floating mb-3">
-            <input value={date} onChange={handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
-            <label htmlFor="date">Choose Date</label>
-          </div>
-          <div className="form-floating mb-3">
-            <input value={time} onChange={handleTimeChange} placeholder="time" required type="time" name="time" id="time" className="form-control" />
-            <label htmlFor="time">Choose Time</label>
-          </div>
-          <div className="form-floating mb-3">
-            <textarea value={reason} onChange={handleReasonChange} placeholder="" name="reason" required id="reason" className="form-control" rows="3"/>
-            <label htmlFor="reason" className="form-label">Description / Reason for Appointment</label>
-          </div>
           <div className="mb-3">
             <select value={technician} onChange={handleTechnicianChange} required name="technician" id="technician" className="form-select">
             <option value="">Select Technician</option>
@@ -162,6 +153,18 @@ const ServiceAppointmentForm = () => {
               );
             })}
             </select>
+          </div>
+          <div className="form-floating mb-3">
+            <input value={date} onChange={handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
+            <label htmlFor="date">Choose Date</label>
+          </div>
+          <div className="form-floating mb-3">
+            <input value={time} onChange={handleTimeChange} placeholder="time" required type="time" name="time" id="time" className="form-control" />
+            <label htmlFor="time">Choose Time</label>
+          </div>
+          <div className="form-floating mb-3">
+            <textarea value={reason} onChange={handleReasonChange} placeholder="" name="reason" required id="reason" className="form-control" rows="3"/>
+            <label htmlFor="reason" className="form-label">Description / Reason for Appointment</label>
           </div>
           <button className="btn btn-primary">Create</button>
           </form>
