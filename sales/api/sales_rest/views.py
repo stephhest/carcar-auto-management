@@ -101,7 +101,7 @@ def api_list_salespeople(request):
             )
         except IntegrityError:
             return JsonResponse(
-                {"message": "Employee number already used.  Please try again."},
+                {"message": "Employee Number already in use. Please try again."},
                 status=400
             )
 

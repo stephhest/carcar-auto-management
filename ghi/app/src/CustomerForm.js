@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
 
 const CustomerForm = () => {
 
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [message, setMessage] = useState('');
 
-    const handleSubmit = (event) => {
+    // const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newCustomer = {
             "name": name,
@@ -21,19 +28,23 @@ const CustomerForm = () => {
                 'Content-Type': 'application/json',
             },
         }
-
-        fetch(customerUrl, fetchConfig)
-            .then((response) => {
-                if (!response.ok) {
-                    alert('Submission Error: Please try again');
-                }
-            })
-            .then(() => {
+        try {
+            const response = await fetch(customerUrl, fetchConfig)
+            const body = await response.json();
+            if (!response.ok) {
+                setMessage(body.message);
+                setShowError(true);
+            } else {
                 setName('');
                 setAddress('');
                 setPhone('');
-            })
-            .catch(e => console.error('Customer fetch error: ', e))
+                setMessage("Customer created successfully!")
+                setShowSuccess(true);
+                // navigate("/customers");
+            }
+        } catch(e) {
+            console.error('Fetch error: ', e)
+        }
     }
 
     const handleChangeName = (event) => {
@@ -52,8 +63,17 @@ const CustomerForm = () => {
     }
 
     return (
+        <>
         <div className="my-5 container">
             <div className="offset-3 col-6">
+                <Alert show={showSuccess} variant='success' onClose={() => {setShowSuccess(false); setMessage('')}} dismissible>
+                    {message}
+                    {/* <br/> */}
+                    {/* <Alert.Link href="/manufacturers">Back to list</Alert.Link> */}
+                </Alert>
+                <Alert show={showError} variant='danger' onClose={() => {setShowError(false); setMessage('')}} dismissible>
+                        {message}
+                </Alert>
                 <div className="shadow p-4 mt-4">
                     <h1>Add a Potential Customer</h1>
                     <form onSubmit={handleSubmit} id="create-customer-form">
@@ -72,8 +92,9 @@ const CustomerForm = () => {
                         <button className="btn btn-primary">Create</button>
                     </form>
                 </div>
-            </div>
+             </div>
         </div>
+        </>
     );
 }
 

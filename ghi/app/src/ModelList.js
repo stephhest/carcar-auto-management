@@ -37,7 +37,7 @@ const ModelList = () => {
                                 <td>{model.name}</td>
                                 <td>{model.manufacturer.name}</td>
                                 <td>
-                                    <img className="img-thumbnail" src={model.picture_url} width="300" height="236"/>
+                                    <img className="img-thumbnail" src={model.picture_url} width="300" height="300" alt=""/>
                                 </td>
                             </tr>
                         );

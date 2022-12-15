@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 const ModelForm = () => {
 
@@ -6,6 +7,9 @@ const ModelForm = () => {
     const [picture_url, setPictureUrl] = useState('');
     const [manufacturer_id, setManufacturer] = useState('');
     const [manufacturers, setManufacturers] = useState([]);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const manufacturerURL = 'http://localhost:8100/api/manufacturers/';
@@ -15,14 +19,13 @@ const ModelForm = () => {
             .catch(e => console.error('Fetch manufacturers error: ', e))
     }, [])
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newModel = {
             'name': name,
             'picture_url': picture_url,
             'manufacturer_id': manufacturer_id
         }
-
         const modelUrl = 'http://localhost:8100/api/models/';
         const fetchConfig = {
             method: "post",
@@ -31,14 +34,22 @@ const ModelForm = () => {
                 'Content-Type': 'application/json',
             },
         }
-        fetch(modelUrl, fetchConfig)
-            .then(response => response.json())
-            .then(() => {
+        try {
+            const response = await fetch(modelUrl, fetchConfig);
+            const body = await response.json();
+            if (!response.ok) {
+                setMessage(body.message);
+                setShowError(true);
+            } else {
                 setName('');
                 setPictureUrl('');
                 setManufacturer('');
-            })
-            .catch(e => console.error('Model fetch error: ', e))
+                setMessage("Vehicle model created successfully!");
+                setShowSuccess(true);
+            }
+        } catch(e) {
+            console.error('Fetch error: ', e)
+        }
     }
 
     const handleChangeName = (event) => {
@@ -60,6 +71,14 @@ const ModelForm = () => {
         <div className="my-5 container">
             <div className="offset-3 col-6">
                 <div className="shadow p-4 mt-4">
+                    <Alert show={showSuccess} variant='success' onClose={() => {setShowSuccess(false); setMessage('')}} dismissible>
+                        {message}
+                        <br/>
+                        <Alert.Link href="/models">Return to list</Alert.Link> or add another.
+                    </Alert>
+                    <Alert show={showError} variant='danger' onClose={() => {setShowError(false); setMessage('')}} dismissible>
+                        {message}
+                    </Alert>
                     <h1>Create a Vehicle Model</h1>
                     <form onSubmit={handleSubmit} id="create-model-form">
                         <div className="form-floating mb-3">

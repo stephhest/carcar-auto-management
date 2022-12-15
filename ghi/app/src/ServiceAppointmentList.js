@@ -65,7 +65,7 @@ class ServiceAppointmentList extends React.Component {
             < br/>
             <div id="heading">
                 <h1>Current Appointments</h1>
-                <Link to="/sales/new">
+                <Link to="/appointments/new">
                         <button id="addbutton" className="btn btn-success">New Service Appointment</button>
                 </Link>
             </div>

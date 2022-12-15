@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 const ManufacturerForm = () => {
 
     const [name, setName] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [message, setMessage] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newManufacturer = { "name": name };
-
         const manufacturerUrl = 'http://localhost:8100/api/manufacturers/';
         const fetchConfig = {
             method: "post",
@@ -16,16 +19,20 @@ const ManufacturerForm = () => {
                 'Content-Type': 'application/json',
             },
         }
-        fetch(manufacturerUrl, fetchConfig)
-            .then((response) => {
-                if (!response.ok) {
-                    alert('Submission Error: Manufacturer name must be unique');
-                }
-            })
-            .then(() => {
+        try {
+            const response = await fetch(manufacturerUrl, fetchConfig);
+            const body = await response.json();
+            if (!response.ok) {
+                setMessage(body.message);
+                setShowError(true);
+            } else {
                 setName('');
-            })
-            .catch(e => console.error('Manufacturer fetch error: ', e))
+                setMessage("Manufacturer created successfully!")
+                setShowSuccess(true);
+            }
+        } catch(e) {
+            console.error('Fetch error: ', e)
+        }
     }
 
     const handleChangeName = (event) => {
@@ -37,6 +44,14 @@ const ManufacturerForm = () => {
         <div className="my-5 container">
             <div className="offset-3 col-6">
                 <div className="shadow p-4 mt-4">
+                    <Alert show={showSuccess} variant='success' onClose={() => {setShowSuccess(false); setMessage('')}} dismissible>
+                        {message}
+                        <br/>
+                        <Alert.Link href="/manufacturers">Return to list</Alert.Link> or add another.
+                    </Alert>
+                    <Alert show={showError} variant='danger' onClose={() => {setShowError(false); setMessage('')}} dismissible>
+                        {message}
+                    </Alert>
                     <h1>Create a Manufacturer</h1>
                     <form onSubmit={handleSubmit} id="create-manufacturer-form">
                         <div className="form-floating mb-3">

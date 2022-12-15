@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 const SalesPersonForm = () => {
 
     const [name, setName] = useState('');
     const [employee_number, setEmployeeNumber] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [message, setMessage] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newSalesperson = {
             "name": name,
             "employee_number": employee_number,
         };
-
         const salespeopleUrl = 'http://localhost:8090/api/salespeople/';
         const fetchConfig = {
             method: "post",
@@ -20,17 +23,21 @@ const SalesPersonForm = () => {
                 'Content-Type': 'application/json',
             },
         }
-        fetch(salespeopleUrl, fetchConfig)
-            .then((response) => {
-                if (!response.ok) {
-                    alert('Submission Error: Employee Number must be unique');
-                }
-            })
-            .then(() => {
+        try {
+            const response = await fetch(salespeopleUrl, fetchConfig);
+            const body = await response.json();
+            if (!response.ok) {
+                setMessage(body.message);
+                setShowError(true);
+            } else {
                 setName('');
                 setEmployeeNumber('');
-            })
-            .catch(e => console.error('Salespeople fetch error: ', e))
+                setMessage("Sales person created successfully!");
+                setShowSuccess(true);
+            }
+        } catch(e) {
+            console.error('Fetch error: ', e)
+        }
     }
 
     const handleChangeName = (event) => {
@@ -47,6 +54,14 @@ const SalesPersonForm = () => {
         <div className="my-5 container">
             <div className="offset-3 col-6">
                 <div className="shadow p-4 mt-4">
+                    <Alert show={showSuccess} variant='success' onClose={() => {setShowSuccess(false); setMessage('')}} dismissible>
+                        {message}
+                        <br/>
+                        <Alert.Link href="/salespeople">Return to sales history</Alert.Link> or add another.
+                    </Alert>
+                    <Alert show={showError} variant='danger' onClose={() => {setShowError(false); setMessage('')}} dismissible>
+                        {message}
+                    </Alert>
                     <h1>Add a Sales Person</h1>
                     <form onSubmit={handleSubmit} id="create-salesperson-form">
                         <div className="form-floating mb-3">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 const AutoForm = () => {
 
@@ -7,6 +8,9 @@ const AutoForm = () => {
     const [vin, setVin] = useState('');
     const [model_id, setModel] = useState('');
     const [models, setModels] = useState([]);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const modelUrl = 'http://localhost:8100/api/models/';
@@ -16,7 +20,7 @@ const AutoForm = () => {
             .catch(e => console.error("Fetch models error: ", e))
     }, [])
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newAuto = {
             'color': color,
@@ -24,7 +28,6 @@ const AutoForm = () => {
             'vin': vin,
             'model_id': model_id,
         }
-
         const carUrl = 'http://localhost:8100/api/automobiles/';
         const fetchConfig = {
             method: "post",
@@ -33,19 +36,23 @@ const AutoForm = () => {
                 'Content-Type': 'application/json',
             },
         }
-        fetch(carUrl, fetchConfig)
-            .then((response) => {
-              if (!response.ok) {
-                  alert('Submission Error: VIN must be unique');
-              } 
-            })
-            .then(() => {
-                setColor('');
-                setYear('');
-                setVin('');
-                setModel('');
-            })
-            .catch(e => console.error('Error: ', e))
+        try {
+          const response = await fetch(carUrl, fetchConfig);
+          const body = await response.json();
+          if (!response.ok) {
+              setMessage(body.message);
+              setShowError(true);
+          } else {
+              setColor('');
+              setYear('');
+              setVin('');
+              setModel('');
+              setMessage("Automobile created successfully!");
+              setShowSuccess(true);
+          }
+        } catch(e) {
+            console.error('Fetch error: ', e)
+        }
     }
 
 
@@ -73,6 +80,14 @@ const AutoForm = () => {
         <div className="my-5 container">
           <div className="offset-3 col-6">
             <div className="shadow p-4 mt-4">
+              <Alert show={showSuccess} variant='success' onClose={() => {setShowSuccess(false); setMessage('')}} dismissible>
+                {message}
+                <br/>
+                <Alert.Link href="/automobiles">Return to list</Alert.Link> or add another.
+              </Alert>
+              <Alert show={showError} variant='danger' onClose={() => {setShowError(false); setMessage('')}} dismissible>
+                  {message}
+              </Alert>
               <h1>Add an Automobile to Inventory</h1>
               <form onSubmit={handleSubmit} id="create-automobile-form">
                 <div className="form-floating mb-3">

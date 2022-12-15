@@ -25,7 +25,7 @@ h1 {
   margin-left: 2rem;
 }
 
-#nav-button {
+.nav-button {
   font-weight: 500;
   font-size: large;
   margin-right: 1rem;
@@ -34,11 +34,11 @@ h1 {
   margin-bottom: 4px;
 }
 
-ul {
-  padding-left: 1rem;
-  list-style-type: none;
+.dropdown-item {
+  color: white;
+  background-color: #198754;
 }
 
-li {
-  padding-left: 8px;
+.dropdown-menu {
+  background-color: #198754;
 }
