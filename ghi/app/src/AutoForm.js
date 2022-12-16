@@ -91,20 +91,20 @@ const AutoForm = () => {
               <h1>Add an Automobile to Inventory</h1>
               <form onSubmit={handleSubmit} id="create-automobile-form">
                 <div className="form-floating mb-3">
-                  <input onChange={handleChangeColor} value={color}  placeholder="Color" required type="text" name="color" id="color" className="form-control" />
+                  <input onChange={handleChangeColor} value={color} required type="text" name="color" id="color" className="form-control" />
                   <label htmlFor="color">Color</label>
                 </div>
                 <div className="form-floating mb-3">
-                  <input onChange={handleChangeYear} value={year}  placeholder="Year" required type="number" name="year" id="year" className="form-control" />
+                  <input onChange={handleChangeYear} value={year} required type="number" name="year" id="year" className="form-control" />
                   <label htmlFor="year">Year</label>
                 </div>
                 <div className="form-floating mb-3">
-                  <input onChange={handleChangeVin} value={vin}  placeholder="VIN" required type="text" name="vin" id="vin" className="form-control" />
-                  <label htmlFor="vin">VIN</label>
+                  <input onChange={handleChangeVin} value={vin} required type="text" name="vin" id="vin" className="form-control" />
+                  <label htmlFor="vin">VIN #</label>
                 </div>
                 <div className="mb-3">
                   <select onChange={handleChangeModel} value={model_id} required name="model" id="model" className="form-select">
-                    <option value="">Choose a model</option>
+                    <option value="">--Select a model--</option>
                     {models.map(model => {
                       return (
                         <option key={model.id} value={model.id}>{model.manufacturer.name} {model.name}</option>

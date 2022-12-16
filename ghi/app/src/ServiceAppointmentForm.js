@@ -16,6 +16,22 @@ const ServiceAppointmentForm = () => {
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
 
+  const timeOptions = [
+    { label: "8:00 AM", value: '08:00:00' },
+    { label: "10:00 AM", value: '10:00:00' },
+    { label: "1:00 PM", value: '13:00:00' },
+    { label: "3:00 PM", value: '15:00:00' },
+  ];
+
+  const serviceOptions = [
+    { label: "Electrical repair", value: "Electrical repair" },
+    { label: "Oil / filter change", value: "Oil / filter change" },
+    { label: "Parts replacement", value: "Parts replacement" },
+    { label: "Standard inspection", value: "Standard inspection" },
+    { label: "Windsheild repair", value: "Windsheild repair" },
+    { label: "Other", value: "Other" },
+  ];
+
   useEffect(() =>  {
     const techUrl = 'http://localhost:8080/api/technicians/'
     fetch(techUrl)
@@ -89,11 +105,13 @@ const ServiceAppointmentForm = () => {
   const handleVinInputChange = (event) => {
     const value = event.target.value;
     setVinInput(value);
+    setVinSelect('');
   }
 
   const handleVinSelectChange = (event) => {
     const value = event.target.value;
     setVinSelect(value);
+    setVinInput('');
   }
 
   const handleOwnerNameChange = (event) => {
@@ -137,12 +155,11 @@ const ServiceAppointmentForm = () => {
           <br/>
           <form onSubmit={handleSubmit} id="create-service-appointment-form" >
           <div className="form-floating mb-3">
-            <input value={vinInput} onChange={handleVinInputChange} placeholder=""  type="text" name="vinInput" id="vinInput" className="form-control" /> <label htmlFor="vin">Enter VIN #</label>
+            <input value={vinInput} onChange={handleVinInputChange} placeholder=""  type="text" name="vinInput" id="vinInput" className="form-control" /> <label htmlFor="vin">VIN #</label>
           </div>
-          <div>OR, if applicable:</div>
           <div className="mb-3">
             <select onChange={handleVinSelectChange} value={vinSelect}  name="vinSelect" id="vinSelect" className="form-select">
-              <option value="">--Select Automobile from Inventory--</option>
+              <option value="">--Or Select VIN from Inventory--</option>
               {autoVOs.map(autoVO => {
                 return (
                   <option key={autoVO.vin} value={autoVO.vin}>{autoVO.vin} - {autoVO.year} {autoVO.manufacturer_name} {autoVO.model_name}</option>
@@ -151,8 +168,8 @@ const ServiceAppointmentForm = () => {
             </select>
           </div> <br/>
           <div className="form-floating mb-3">
-            <input value={ownerName} onChange={handleOwnerNameChange} placeholder="" required type="text" name="ownerName" id="ownerName" className="form-control" />
-            <label htmlFor="ownerName">Enter Owner Name</label>
+            <input value={ownerName} onChange={handleOwnerNameChange} required type="text" name="ownerName" id="ownerName" className="form-control" />
+            <label htmlFor="ownerName">Owner Name</label>
           </div>
           <div className="mb-3">
             <select value={technician} onChange={handleTechnicianChange} required name="technician" id="technician" className="form-select">
@@ -167,16 +184,28 @@ const ServiceAppointmentForm = () => {
             </select>
           </div>
           <div className="form-floating mb-3">
-            <input value={date} onChange={handleDateChange} placeholder="date" required type="date" name="date" id="date" className="form-control" />
-            <label htmlFor="date">Choose Date</label>
+            <input value={date} onChange={handleDateChange} required type="date" name="date" id="date" className="form-control" />
+            <label htmlFor="date">Date</label>
           </div>
-          <div className="form-floating mb-3">
-            <input value={time} onChange={handleTimeChange} placeholder="time" required type="time" name="time" id="time" className="form-control" />
-            <label htmlFor="time">Choose Time</label>
+          <div className="mb-3">
+            <select onChange={handleTimeChange} value={time} name="time" id="time" className="form-select">
+                <option value="">--Select Time--</option>
+                {timeOptions.map(option => {
+                    return (
+                    <option key={option.value} value={option.value}> {option.label} </option>
+                    )
+                })}
+              </select>
           </div>
-          <div className="form-floating mb-3">
-            <textarea value={reason} onChange={handleReasonChange} placeholder="" name="reason" required id="reason" className="form-control" rows="3"/>
-            <label htmlFor="reason" className="form-label">Description / Reason for Appointment</label>
+          <div className="mb-3">
+            <select onChange={handleReasonChange} value={reason} name="reason" id="reason" className="form-select">
+                <option value="">--Select Service Category--</option>
+                {serviceOptions.map(option => {
+                    return (
+                    <option key={option.value} value={option.value}> {option.label} </option>
+                    )
+                })}
+              </select>
           </div>
           <button className="btn btn-primary">Create</button>
           </form>
