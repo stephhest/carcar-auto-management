@@ -12,6 +12,31 @@ code {
     monospace;
 }
 
+.homepage-card-container {
+  text-align: center;
+}
+
+.homepage-card-col {
+  padding-bottom: 2rem;
+}
+
+.homepage-card-row {
+  padding: 0;
+  margin: 0;
+}
+
+/* .homepage-card {
+  border-width: 2px;
+} */
+
+.homepage-card-title {
+  margin: 0;
+}
+
+.list-group-item {
+  background-color: rgb(241, 241, 241);
+}
+
 #heading {
   display: flex;
 }
@@ -27,7 +52,7 @@ h1 {
 
 .nav-button {
   font-weight: 500;
-  font-size: large;
+
   margin-right: 1rem;
   margin-left: 1rem;
   margin-top: 4px;
@@ -36,9 +61,9 @@ h1 {
 
 .dropdown-item {
   color: white;
-  background-color: #198754;
+  background-color: black;
 }
 
 .dropdown-menu {
-  background-color: #198754;
+  background-color: black;
 }

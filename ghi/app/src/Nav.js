@@ -5,16 +5,16 @@ import './index.css';
 function Nav() {
   return (
     <>
-    <nav className="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <NavLink className="navbar-brand" to="/">CarCar</NavLink>
-
+          <NavLink className="nav-button" to="/">Home</NavLink>
           <Dropdown>
-            <Dropdown.Toggle className="nav-button" variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className="nav-button" variant="dark" id="dropdown-basic">
               Inventory
             </Dropdown.Toggle>
             <Dropdown.Menu className="dropdown-menu">
@@ -25,7 +25,7 @@ function Nav() {
           </Dropdown>
 
           <Dropdown>
-            <Dropdown.Toggle className="nav-button" variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className="nav-button" variant="dark" id="dropdown-basic">
               Service
             </Dropdown.Toggle>
             <Dropdown.Menu className="dropdown-menu">
@@ -37,7 +37,7 @@ function Nav() {
           </Dropdown>
 
           <Dropdown>
-            <Dropdown.Toggle className="nav-button" variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className="nav-button" variant="dark" id="dropdown-basic">
               Sales
             </Dropdown.Toggle>
             <Dropdown.Menu className="dropdown-menu">
